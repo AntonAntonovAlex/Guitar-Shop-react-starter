@@ -3,7 +3,8 @@ export const REQUEST_TIMEOUT = 5000;
 
 export enum AppRoute {
     Main = '/',
-    NotFoundScreen = '*'
+    NotFoundScreen = '*',
+    Guitars = '/guitars/:id',
   }
 
 export enum NameSpace {

@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getLoadedDataStatus } from '../../store/guitar-data/selectors';
+import GuitarScreen from '../guitar-screen/guitar-screen';
 import LoadingScreen from '../loading-screen/loading-screen';
 import MainScreen from '../main-screen/main-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
@@ -24,6 +25,10 @@ function App(): JSX.Element {
       <Route
         path={AppRoute.NotFoundScreen}
         element={<NotFoundScreen/>}
+      />
+      <Route
+        path={AppRoute.Guitars}
+        element={<GuitarScreen/>}
       />
     </Routes>
   );
