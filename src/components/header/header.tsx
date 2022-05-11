@@ -2,7 +2,7 @@ function Header(): JSX.Element {
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
-        <a className="header__logo logo" href="todo">
+        <a className="header__logo logo">
           <img
             className="logo__img"
             width={70}
