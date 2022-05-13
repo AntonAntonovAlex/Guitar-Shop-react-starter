@@ -1,8 +1,19 @@
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
+import Footer from '../footer/footer';
+import Header from '../header/header';
+
 function NotFoundScreen(): JSX.Element {
   return (
-    <header className="header">
-      <h1 className="page-content__title title title--bigger">404 Not Found</h1>
-    </header>
+    <div className="wrapper">
+      <Header />
+      <main className="page-content">
+        <header className="header">
+          <Link to={AppRoute.Main} className="page-content__title title title--bigger">404 Not Found</Link>
+        </header>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
