@@ -7,7 +7,12 @@ export type GuitarData = {
     isDataLoaded: boolean,
     guitar: Guitar | null,
     reviews: Review[],
-  };
+    countGuitars: number,
+};
+
+export type GuitarProcess = {
+  activPage: number,
+};
 
 export type State = ReturnType<typeof store.getState>;
 

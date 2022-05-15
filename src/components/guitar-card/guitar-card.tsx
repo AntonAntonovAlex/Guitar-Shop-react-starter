@@ -26,8 +26,8 @@ function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
   return (
     <div className="product-card">
       <img
-        src={previewImg}
-        srcSet={`${previewImg}@2x.jpg 2x`}
+        src={`../${previewImg}`}
+        srcSet={`../${previewImg}@2x.jpg 2x`}
         width={75}
         height={190}
         alt={name}

@@ -1,12 +1,30 @@
-import { useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { store } from '../../store';
+import { fetchGuitarsAction } from '../../store/api-actions';
+import { loadGuitars } from '../../store/guitar-data/guitar-data';
 import { getGuitars } from '../../store/guitar-data/selectors';
+import { changeActivPage } from '../../store/guitar-process/guitar-process';
 import { Guitar } from '../../types/guitar';
 import Footer from '../footer/footer';
 import GuitarCard from '../guitar-card/guitar-card';
 import Header from '../header/header';
+import PaginationList from '../pagination-list/pagination-list';
 
 function MainScreen(): JSX.Element {
-  const guitarsList: Guitar[] = useAppSelector(getGuitars).slice(0, 9);
+  const params = useParams();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(changeActivPage(Number(params.id)));
+    store.dispatch(fetchGuitarsAction(Number(params.id)));
+    return () => {
+      store.dispatch(loadGuitars({guitars: [], isDataLoadediews: false}));
+    };
+  }, [params.id]);
+
+  const guitarsList: Guitar[] = useAppSelector(getGuitars);
 
   return (
     <div className="wrapper">
@@ -168,28 +186,7 @@ function MainScreen(): JSX.Element {
               {guitarsList.map((guitar) => (<GuitarCard guitar={guitar} key={guitar.id}/>))}
             </div>
             <div className="pagination page-content__pagination">
-              <ul className="pagination__list">
-                <li className="pagination__page pagination__page--active">
-                  <a className="link pagination__page-link" href="#todo">
-                  1
-                  </a>
-                </li>
-                <li className="pagination__page">
-                  <a className="link pagination__page-link" href="#todo">
-                  2
-                  </a>
-                </li>
-                <li className="pagination__page">
-                  <a className="link pagination__page-link" href="#todo">
-                  3
-                  </a>
-                </li>
-                <li className="pagination__page pagination__page--next" id="next">
-                  <a className="link pagination__page-link" href="#todo">
-                  Далее
-                  </a>
-                </li>
-              </ul>
+              <PaginationList/>
             </div>
           </div>
         </div>

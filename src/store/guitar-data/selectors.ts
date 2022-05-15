@@ -7,3 +7,4 @@ export const getGuitars = (state: State): Guitar[] => state[NameSpace.Data].guit
 export const getLoadedDataStatus = (state: State): boolean => state[NameSpace.Data].isDataLoaded;
 export const getGuitar = (state: State): Guitar | null => state[NameSpace.Data].guitar;
 export const getReviews = (state: State): Review[] => state[NameSpace.Data].reviews;
+export const getCountGuitars = (state: State): number => state[NameSpace.Data].countGuitars;

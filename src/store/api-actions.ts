@@ -1,22 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { APIRoute } from '../const';
+import { APIRoute, COUNT_GUITAR_CARD_IN_PAGE } from '../const';
 import { errorHandle } from '../services/error-handle';
 import { Guitar } from '../types/guitar';
 import { Review } from '../types/review';
 import { AppDispatch, State } from '../types/state';
-import { loadGuitars, loadGuitar } from './guitar-data/guitar-data';
+import { loadGuitars, loadGuitar, loadCountGuitars } from './guitar-data/guitar-data';
 
-export const fetchGuitarsAction = createAsyncThunk<void, undefined, {
+export const fetchGuitarsAction = createAsyncThunk<void, number, {
     dispatch: AppDispatch,
     state: State,
     extra: AxiosInstance
   }>(
     'fetchGuitars',
-    async (_arg, {dispatch, extra: api}) => {
+    async (id, {dispatch, extra: api}) => {
       try {
-        const {data} = await api.get<Guitar[]>(APIRoute.Guitars);
-        dispatch(loadGuitars(data));
+        //const {data} = await api.get<Guitar[]>(`${APIRoute.Guitars}?_start=0&_limit=9`);
+        const response = await api.get(`${APIRoute.Guitars}?_start=${(id-1)*9}&_limit=${COUNT_GUITAR_CARD_IN_PAGE}`);
+        dispatch(loadGuitars(response.data));
+        dispatch(loadCountGuitars(response.headers['x-total-count']));
       } catch (error) {
         errorHandle(error);
       }

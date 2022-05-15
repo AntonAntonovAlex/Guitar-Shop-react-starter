@@ -1,4 +1,4 @@
-import { Routes } from 'react-router-dom';
+import { Navigate, Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -18,6 +18,9 @@ function App(): JSX.Element {
   }
   return (
     <Routes>
+      <Route path="/"
+        element={<Navigate to="/catalog/page_1" replace />}
+      />
       <Route
         path={AppRoute.Main}
         element={<MainScreen/>}
