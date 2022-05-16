@@ -36,7 +36,7 @@ function MainScreen(): JSX.Element {
           </h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
             <li className="breadcrumbs__item">
-              <a className="link" href="./main.html">
+              <a className="link" href="/">
               Главная
               </a>
             </li>
