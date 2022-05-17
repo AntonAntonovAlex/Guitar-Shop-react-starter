@@ -9,10 +9,6 @@ function Reviews(): JSX.Element {
   const countReviews = useAppSelector(getCountReviews);
   const sliceReviews = reviews.slice(0, countReviews);
 
-
-  // eslint-disable-next-line no-console
-  console.log('sliceReviews - ', sliceReviews);
-
   function getRatingStars(ratingGuitar: number) {
     const raitingStarsItems = [];
 

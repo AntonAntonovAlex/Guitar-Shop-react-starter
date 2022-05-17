@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
@@ -15,10 +15,8 @@ function GuitarScreen(): JSX.Element {
 
   const selectedGuitar = useAppSelector(getGuitar);
   const guitarReviews = useAppSelector(getReviews);
-  // eslint-disable-next-line no-console
-  console.log('selectedGuitar - ', selectedGuitar);
-  // eslint-disable-next-line no-console
-  console.log('guitarReviews - ', guitarReviews);
+
+  const location = useLocation();
 
   useEffect(() => {
     store.dispatch(fetchGuitarAction(Number(params.id)));
@@ -80,22 +78,27 @@ function GuitarScreen(): JSX.Element {
               <div className="rate product-container__rating">
                 {getRatingStars((selectedGuitar?.rating)? selectedGuitar.rating : 0)}
                 <p className="visually-hidden">Оценка: Хорошо</p>
+                <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{guitarReviews.length}</p>
               </div>
               <div className="tabs">
                 <a
-                  className="button button--medium tabs__button"
+                  className={location.hash === '#characteristics' ?
+                    'button button--medium tabs__button' :
+                    'button button--black-border button--medium tabs__button'}
                   href="#characteristics"
                 >
                 Характеристики
                 </a>
                 <a
-                  className="button button--black-border button--medium tabs__button"
+                  className={location.hash === '#description' ?
+                    'button button--medium tabs__button' :
+                    'button button--black-border button--medium tabs__button'}
                   href="#description"
                 >
                 Описание
                 </a>
                 <div className="tabs__content" id="characteristics">
-                  <table className="tabs__table">
+                  <table className={location.hash === '#characteristics' ? 'tabs__table' : 'tabs__table hidden'}>
                     <tbody>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Артикул:</td>
@@ -111,7 +114,7 @@ function GuitarScreen(): JSX.Element {
                       </tr>
                     </tbody>
                   </table>
-                  <p className="tabs__product-description hidden">
+                  <p className={location.hash === '#description' ? 'tabs__product-description' : 'tabs__product-description hidden' }>
                     {selectedGuitar?.description}
                   </p>
                 </div>

@@ -47,7 +47,7 @@ function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <Link className="button button--mini" to={`${'/guitars/'}${id}`}>
+        <Link className="button button--mini" to={`${'/guitars/'}${id}#characteristics`}>
             Подробнее
         </Link>
         <a
