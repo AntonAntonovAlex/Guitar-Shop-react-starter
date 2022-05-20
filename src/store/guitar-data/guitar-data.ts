@@ -26,7 +26,7 @@ export const guitarData = createSlice({
       }
     },
     loadCountGuitars: (state, action) => {
-      state.countGuitars = action.payload - 14;
+      state.countGuitars = action.payload;
     },
   },
 });

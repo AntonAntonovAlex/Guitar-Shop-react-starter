@@ -1,10 +1,15 @@
+import { MouseEventHandler } from 'react';
 import { useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/guitar-data/selectors';
 import { getCountReviews } from '../../store/guitar-process/selectors';
 import { Review } from '../../types/review';
 import ShowMoreButton from '../show-more-button/show-more-button';
 
-function Reviews(): JSX.Element {
+type ReviewsProps = {
+  onEventShowModalReviewCallback: MouseEventHandler<HTMLAnchorElement>;
+};
+
+function Reviews({onEventShowModalReviewCallback}: ReviewsProps): JSX.Element {
   const reviews :Review[] = useAppSelector(getReviews);
   const countReviews = useAppSelector(getCountReviews);
   const sliceReviews = reviews.slice(0, countReviews);
@@ -30,6 +35,7 @@ function Reviews(): JSX.Element {
       <a
         className="button button--red-border button--big reviews__sumbit-button"
         href="#todo"
+        onClick={onEventShowModalReviewCallback}
       >
             Оставить отзыв
       </a>

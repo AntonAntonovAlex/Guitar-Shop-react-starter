@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -8,15 +8,19 @@ import { loadGuitar } from '../../store/guitar-data/guitar-data';
 import { getGuitar, getReviews } from '../../store/guitar-data/selectors';
 import Footer from '../footer/footer';
 import Header from '../header/header';
+import ModalReview from '../modal-review/modal-review';
 import Reviews from '../reviews/reviews';
 
 function GuitarScreen(): JSX.Element {
   const params = useParams();
 
-  const selectedGuitar = useAppSelector(getGuitar);
-  const guitarReviews = useAppSelector(getReviews);
+  const [showModalReview, setShowModalReview] = useState(false);
 
   const location = useLocation();
+  const isCharacteristics = location.hash !== '#description';
+
+  const selectedGuitar = useAppSelector(getGuitar);
+  const guitarReviews = useAppSelector(getReviews);
 
   useEffect(() => {
     store.dispatch(fetchGuitarAction(Number(params.id)));
@@ -39,6 +43,20 @@ function GuitarScreen(): JSX.Element {
       raitingStarsItems
     );
   }
+
+  /* function onScrollList(event: React.UIEvent<HTMLDivElement>) {
+    const scrollBottom = event.target;
+
+    if (scrollBottom) {
+      // eslint-disable-next-line no-console
+      console.log('allert');
+    }
+  }*/
+
+  /*window.addEventListener('scroll', (e) => {
+    // eslint-disable-next-line no-console
+    console.log('allert');
+  });*/
 
 
   return (
@@ -71,6 +89,7 @@ function GuitarScreen(): JSX.Element {
               height={235}
               alt=""
             />
+            {showModalReview && <ModalReview />}
             <div className="product-container__info-wrapper">
               <h2 className="product-container__title title title--big title--uppercase">
                 {selectedGuitar?.name}
@@ -82,23 +101,23 @@ function GuitarScreen(): JSX.Element {
               </div>
               <div className="tabs">
                 <a
-                  className={location.hash === '#characteristics' ?
+                  className={isCharacteristics ?
                     'button button--medium tabs__button' :
-                    'button button--black-border button--medium tabs__button'}
+                    'button button--medium tabs__button button--black-border'}
                   href="#characteristics"
                 >
                 Характеристики
                 </a>
                 <a
-                  className={location.hash === '#description' ?
-                    'button button--medium tabs__button' :
-                    'button button--black-border button--medium tabs__button'}
+                  className={isCharacteristics ?
+                    'button button--medium tabs__button button--black-border' :
+                    'button button--medium tabs__button'}
                   href="#description"
                 >
                 Описание
                 </a>
                 <div className="tabs__content" id="characteristics">
-                  <table className={location.hash === '#characteristics' ? 'tabs__table' : 'tabs__table hidden'}>
+                  <table className={isCharacteristics ? 'tabs__table' : 'tabs__table hidden'}>
                     <tbody>
                       <tr className="tabs__table-row">
                         <td className="tabs__title">Артикул:</td>
@@ -114,7 +133,7 @@ function GuitarScreen(): JSX.Element {
                       </tr>
                     </tbody>
                   </table>
-                  <p className={location.hash === '#description' ? 'tabs__product-description' : 'tabs__product-description hidden' }>
+                  <p className={isCharacteristics ? 'tabs__product-description hidden' : 'tabs__product-description' }>
                     {selectedGuitar?.description}
                   </p>
                 </div>
@@ -135,7 +154,7 @@ function GuitarScreen(): JSX.Element {
               </a>
             </div>
           </div>
-          <Reviews/>
+          <Reviews onEventShowModalReviewCallback={() => setShowModalReview(true)}/>
         </div>
       </main>
       <Footer/>
