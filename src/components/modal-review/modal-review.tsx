@@ -1,9 +1,96 @@
-import { useAppSelector } from '../../hooks';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
+import { RatingStars } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { sendReviewAction } from '../../store/api-actions';
 import { getGuitar } from '../../store/guitar-data/selectors';
+import { ReviewData } from '../../types/review-data';
 
-function ModalReview(): JSX.Element {
+type ModalReviewProps = {
+  onEventShowModalReviewCallback: () => void;
+  onEventShowModalSuccessReview: () => void;
+};
+
+function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessReview}: ModalReviewProps): JSX.Element {
 
   const selectedGuitar = useAppSelector(getGuitar);
+
+  const [userName, setUserName] = useState('');
+  const [userAdvantage, setUserAdvantage] = useState('');
+  const [userDisadvantage, setUserDisadvantage] = useState('');
+  const [userComment, setUserComment] = useState('');
+  const [userRating, setUserRating] = useState(0);
+
+  const dispatch = useAppDispatch();
+
+  const sendReview = (reviewData: ReviewData) => {
+    dispatch(sendReviewAction(reviewData));
+  };
+
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    if (selectedGuitar && userRating !== null && userComment !== null && userDisadvantage !== null && userAdvantage !== null && userName !== null) {
+      sendReview({
+        guitarId: selectedGuitar.id,
+        userName: userName,
+        advantage: userAdvantage,
+        disadvantage: userDisadvantage,
+        comment: userComment,
+        rating: userRating,
+        closeModalReviewCallback: () => onEventShowModalReviewCallback(),
+        showModalSuccessReview: () => onEventShowModalSuccessReview(),
+      });
+    }
+  };
+
+  const handleRatingChange = ({ target}: ChangeEvent<HTMLInputElement>) => {
+    setUserRating(+target.value);
+  };
+
+  function getRatingStars() {
+    const raitingStarsItems = [];
+
+    for (let i = 5; i > 0; i--) {
+      raitingStarsItems.push(
+        <input
+          key={`input_star-${i}`}
+          className="visually-hidden"
+          id={`star-${i}`}
+          name="rate"
+          type="radio"
+          defaultValue={i}
+          onChange={handleRatingChange}
+          required
+        />,
+      );
+      raitingStarsItems.push(
+        <label
+          key={`label_star-${i}`}
+          className="rate__label"
+          htmlFor={`star-${i}`}
+          title={RatingStars[i]}
+        />,
+      );
+    }
+
+    return (
+      raitingStarsItems
+    );
+  }
+
+  const escFunction = useCallback((evt) => {
+    if (evt.keyCode === 27) {
+      onEventShowModalReviewCallback();
+    }
+  }, [onEventShowModalReviewCallback]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction);
+    };
+  }, [escFunction]);
 
   return (
     <div
@@ -11,7 +98,7 @@ function ModalReview(): JSX.Element {
     >
       <div className="modal is-active modal--review modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal="" />
+          <div className="modal__overlay" data-close-modal="" onClick={onEventShowModalReviewCallback}/>
           <div className="modal__content">
             <h2 className="modal__header modal__header--review title title--medium">
           Оставить отзыв
@@ -19,7 +106,7 @@ function ModalReview(): JSX.Element {
             <h3 className="modal__product-name title title--medium-20 title--uppercase">
               {selectedGuitar?.name}
             </h3>
-            <form className="form-review">
+            <form className="form-review" onSubmit={handleFormSubmit}>
               <div className="form-review__wrapper">
                 <div className="form-review__name-wrapper">
                   <label
@@ -33,71 +120,22 @@ function ModalReview(): JSX.Element {
                     id="user-name"
                     type="text"
                     autoComplete="off"
+                    required
+                    onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                      const value = target.value;
+                      setUserName(value);
+                    }}
+                    value={userName}
                   />
-                  <p className="form-review__warning">Заполните поле</p>
+                  <p className="form-review__warning">{userName === '' ? 'Заполните поле' : ''}</p>
                 </div>
                 <div>
                   <span className="form-review__label form-review__label--required">
                 Ваша Оценка
                   </span>
                   <div className="rate rate--reverse">
-                    <input
-                      className="visually-hidden"
-                      id="star-5"
-                      name="rate"
-                      type="radio"
-                      defaultValue={5}
-                    />
-                    <label
-                      className="rate__label"
-                      htmlFor="star-5"
-                      title="Отлично"
-                    />
-                    <input
-                      className="visually-hidden"
-                      id="star-4"
-                      name="rate"
-                      type="radio"
-                      defaultValue={4}
-                    />
-                    <label
-                      className="rate__label"
-                      htmlFor="star-4"
-                      title="Хорошо"
-                    />
-                    <input
-                      className="visually-hidden"
-                      id="star-3"
-                      name="rate"
-                      type="radio"
-                      defaultValue={3}
-                    />
-                    <label
-                      className="rate__label"
-                      htmlFor="star-3"
-                      title="Нормально"
-                    />
-                    <input
-                      className="visually-hidden"
-                      id="star-2"
-                      name="rate"
-                      type="radio"
-                      defaultValue={2}
-                    />
-                    <label className="rate__label" htmlFor="star-2" title="Плохо" />
-                    <input
-                      className="visually-hidden"
-                      id="star-1"
-                      name="rate"
-                      type="radio"
-                      defaultValue={1}
-                    />
-                    <label
-                      className="rate__label"
-                      htmlFor="star-1"
-                      title="Ужасно"
-                    />
-                    <p className="rate__message">Поставьте оценку</p>
+                    {getRatingStars()}
+                    <p className="rate__message">{userRating === 0 ? 'Поставьте оценку' : ''}</p>
                   </div>
                 </div>
               </div>
@@ -112,8 +150,14 @@ function ModalReview(): JSX.Element {
                 id="adv"
                 type="text"
                 autoComplete="off"
+                required
+                onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                  const value = target.value;
+                  setUserAdvantage(value);
+                }}
+                value={userAdvantage}
               />
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{userAdvantage === '' ? 'Заполните поле' : ''}</p>
               <label
                 className="form-review__label form-review__label--required"
                 htmlFor="disadv"
@@ -125,8 +169,14 @@ function ModalReview(): JSX.Element {
                 id="disadv"
                 type="text"
                 autoComplete="off"
+                required
+                onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                  const value = target.value;
+                  setUserDisadvantage(value);
+                }}
+                value={userDisadvantage}
               />
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{userDisadvantage === '' ? 'Заполните поле' : ''}</p>
               <label
                 className="form-review__label form-review__label--required"
                 htmlFor="comment"
@@ -138,9 +188,14 @@ function ModalReview(): JSX.Element {
                 id="comment"
                 rows={10}
                 autoComplete="off"
-                defaultValue={''}
+                required
+                onChange={({target}: ChangeEvent<HTMLTextAreaElement>) => {
+                  const value = target.value;
+                  setUserComment(value);
+                }}
+                value={userComment}
               />
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{userComment === '' ? 'Заполните поле' : ''}</p>
               <button
                 className="button button--medium-20 form-review__button"
                 type="submit"
@@ -152,6 +207,7 @@ function ModalReview(): JSX.Element {
               className="modal__close-btn button-cross"
               type="button"
               aria-label="Закрыть"
+              onClick={onEventShowModalReviewCallback}
             >
               <span className="button-cross__icon" />
               <span className="modal__close-btn-interactive-area" />

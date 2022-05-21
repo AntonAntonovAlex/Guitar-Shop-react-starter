@@ -1,4 +1,5 @@
 import { TypesGuitar } from './types/types-guitar';
+import { TypesRatingStars } from './types/types-rating-stars';
 
 export const BACKEND_URL = 'https://guitar-shop.accelerator.pages.academy';
 export const REQUEST_TIMEOUT = 5000;
@@ -36,4 +37,12 @@ export const GuitarType: TypesGuitar = {
   'ukulele': 'Укулеле',
   'electric': 'Электрогитара',
   'acoustic': 'Акустическая',
+};
+
+export const RatingStars: TypesRatingStars = {
+  1: 'Ужасно',
+  2: 'Плохо',
+  3: 'Нормально',
+  4: 'Хорошо',
+  5: 'Отлично',
 };

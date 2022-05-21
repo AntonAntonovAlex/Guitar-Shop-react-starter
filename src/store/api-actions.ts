@@ -4,6 +4,7 @@ import { APIRoute, COUNT_GUITAR_CARD_IN_PAGE } from '../const';
 import { errorHandle } from '../services/error-handle';
 import { Guitar } from '../types/guitar';
 import { Review } from '../types/review';
+import { ReviewData } from '../types/review-data';
 import { AppDispatch, State } from '../types/state';
 import { loadGuitars, loadGuitar, loadCountGuitars } from './guitar-data/guitar-data';
 
@@ -36,6 +37,22 @@ export const fetchGuitarAction = createAsyncThunk<void, number, {
         const {data: guitar} = await api.get<Guitar>(`${APIRoute.Guitars}/${id}`);
         const {data: reviews} = await api.get<Review[]>(`${APIRoute.Guitars}/${id}/comments`);
         dispatch(loadGuitar({guitar, reviews}));
+      } catch (error) {
+        errorHandle(error);
+      }
+    },
+  );
+
+export const sendReviewAction = createAsyncThunk<void, ReviewData, {
+    state: State,
+    extra: AxiosInstance
+  }>(
+    'review',
+    async ({guitarId, userName, advantage, disadvantage, comment, rating, closeModalReviewCallback, showModalSuccessReview}, {extra: api}) => {
+      try {
+        await api.post<ReviewData>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});
+        closeModalReviewCallback();
+        showModalSuccessReview();
       } catch (error) {
         errorHandle(error);
       }

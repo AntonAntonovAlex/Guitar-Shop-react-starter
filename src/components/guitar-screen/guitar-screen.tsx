@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -8,13 +8,12 @@ import { loadGuitar } from '../../store/guitar-data/guitar-data';
 import { getGuitar, getReviews } from '../../store/guitar-data/selectors';
 import Footer from '../footer/footer';
 import Header from '../header/header';
-import ModalReview from '../modal-review/modal-review';
 import Reviews from '../reviews/reviews';
 
 function GuitarScreen(): JSX.Element {
   const params = useParams();
 
-  const [showModalReview, setShowModalReview] = useState(false);
+  //const [showModalReview, setShowModalReview] = useState(false);
 
   const location = useLocation();
   const isCharacteristics = location.hash !== '#description';
@@ -89,7 +88,6 @@ function GuitarScreen(): JSX.Element {
               height={235}
               alt=""
             />
-            {showModalReview && <ModalReview />}
             <div className="product-container__info-wrapper">
               <h2 className="product-container__title title title--big title--uppercase">
                 {selectedGuitar?.name}
@@ -154,7 +152,7 @@ function GuitarScreen(): JSX.Element {
               </a>
             </div>
           </div>
-          <Reviews onEventShowModalReviewCallback={() => setShowModalReview(true)}/>
+          <Reviews />
         </div>
       </main>
       <Footer/>
