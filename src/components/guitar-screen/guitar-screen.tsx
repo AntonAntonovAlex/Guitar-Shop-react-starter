@@ -13,8 +13,6 @@ import Reviews from '../reviews/reviews';
 function GuitarScreen(): JSX.Element {
   const params = useParams();
 
-  //const [showModalReview, setShowModalReview] = useState(false);
-
   const location = useLocation();
   const isCharacteristics = location.hash !== '#description';
 
@@ -76,7 +74,7 @@ function GuitarScreen(): JSX.Element {
               </a>
             </li>
             <li className="breadcrumbs__item">
-              <a className="link">{selectedGuitar?.name}</a>
+              <a className="link" href="todo">{selectedGuitar?.name}</a>
             </li>
           </ul>
           <div className="product-container">

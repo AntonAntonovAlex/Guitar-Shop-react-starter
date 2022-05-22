@@ -10,7 +10,11 @@ import ShowMoreButton from '../show-more-button/show-more-button';
 function Reviews(): JSX.Element {
   const reviews :Review[] = useAppSelector(getReviews);
   const countReviews = useAppSelector(getCountReviews);
-  const sliceReviews = reviews.slice(0, countReviews);
+
+  const reviewsForSort = [...reviews];
+  const sortedReviews = reviewsForSort.sort((reviewA, reviewB) => (+(new Date(reviewB.createAt))) - (+(new Date(reviewA.createAt))));
+
+  const sliceReviews = sortedReviews.slice(0, countReviews);
 
   const [showModalReview, setShowModalReview] = useState(false);
   const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
