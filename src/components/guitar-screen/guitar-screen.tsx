@@ -24,7 +24,7 @@ function GuitarScreen(): JSX.Element {
   useEffect(() => {
     store.dispatch(fetchGuitarAction(Number(params.id)));
     return () => {
-      store.dispatch(loadGuitar({film: null, similarFilms: [], reviews: []}));
+      store.dispatch(loadGuitar({guitar: null, reviews: []}));
     };
   }, [params.id]);
 

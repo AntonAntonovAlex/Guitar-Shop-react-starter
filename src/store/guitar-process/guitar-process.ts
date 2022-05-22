@@ -17,7 +17,10 @@ export const guitarProcess = createSlice({
     incrementCountReviews: (state) => {
       state.countReviews = state.countReviews + STEP_COUNT_REVIEWS;
     },
+    resetCountReviews: (state) => {
+      state.countReviews = STEP_COUNT_REVIEWS;
+    },
   },
 });
 
-export const {changeActivPage, incrementCountReviews} = guitarProcess.actions;
+export const {changeActivPage, incrementCountReviews, resetCountReviews} = guitarProcess.actions;

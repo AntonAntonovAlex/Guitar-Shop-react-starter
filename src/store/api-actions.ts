@@ -16,7 +16,6 @@ export const fetchGuitarsAction = createAsyncThunk<void, number, {
     'fetchGuitars',
     async (id, {dispatch, extra: api}) => {
       try {
-        //const {data} = await api.get<Guitar[]>(`${APIRoute.Guitars}?_start=0&_limit=9`);
         const response = await api.get(`${APIRoute.Guitars}?_start=${(id-1)*9}&_limit=${COUNT_GUITAR_CARD_IN_PAGE}`);
         dispatch(loadGuitars(response.data));
         dispatch(loadCountGuitars(response.headers['x-total-count']));
