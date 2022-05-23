@@ -93,126 +93,122 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
   }, [escFunction]);
 
   return (
-    <div
-      style={{ position: 'relative', width: 550, height: 610, marginBottom: 50 }}
-    >
-      <div className="modal is-active modal--review modal-for-ui-kit">
-        <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal="" onClick={onEventShowModalReviewCallback}/>
-          <div className="modal__content">
-            <h2 className="modal__header modal__header--review title title--medium">
+    <div className="modal is-active modal--review modal-for-ui-kit">
+      <div className="modal__wrapper">
+        <div className="modal__overlay" data-close-modal="" onClick={onEventShowModalReviewCallback}/>
+        <div className="modal__content">
+          <h2 className="modal__header modal__header--review title title--medium">
           Оставить отзыв
-            </h2>
-            <h3 className="modal__product-name title title--medium-20 title--uppercase">
-              {selectedGuitar?.name}
-            </h3>
-            <form className="form-review" onSubmit={handleFormSubmit}>
-              <div className="form-review__wrapper">
-                <div className="form-review__name-wrapper">
-                  <label
-                    className="form-review__label form-review__label--required"
-                    htmlFor="user-name"
-                  >
+          </h2>
+          <h3 className="modal__product-name title title--medium-20 title--uppercase">
+            {selectedGuitar?.name}
+          </h3>
+          <form className="form-review" onSubmit={handleFormSubmit}>
+            <div className="form-review__wrapper">
+              <div className="form-review__name-wrapper">
+                <label
+                  className="form-review__label form-review__label--required"
+                  htmlFor="user-name"
+                >
                 Ваше Имя
-                  </label>
-                  <input
-                    className="form-review__input form-review__input--name"
-                    id="user-name"
-                    type="text"
-                    autoComplete="off"
-                    required
-                    onChange={({target}: ChangeEvent<HTMLInputElement>) => {
-                      const value = target.value;
-                      setUserName(value);
-                    }}
-                    value={userName}
-                  />
-                  <p className="form-review__warning">{userName === '' ? 'Заполните поле' : ''}</p>
-                </div>
-                <div>
-                  <span className="form-review__label form-review__label--required">
+                </label>
+                <input
+                  className="form-review__input form-review__input--name"
+                  id="user-name"
+                  type="text"
+                  autoComplete="off"
+                  required
+                  onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                    const value = target.value;
+                    setUserName(value);
+                  }}
+                  value={userName}
+                />
+                <p className="form-review__warning">{userName === '' ? 'Заполните поле' : ''}</p>
+              </div>
+              <div>
+                <span className="form-review__label form-review__label--required">
                 Ваша Оценка
-                  </span>
-                  <div className="rate rate--reverse">
-                    {getRatingStars()}
-                    <p className="rate__message">{userRating === 0 ? 'Поставьте оценку' : ''}</p>
-                  </div>
+                </span>
+                <div className="rate rate--reverse">
+                  {getRatingStars()}
+                  <p className="rate__message">{userRating === 0 ? 'Поставьте оценку' : ''}</p>
                 </div>
               </div>
-              <label
-                className="form-review__label form-review__label--required"
-                htmlFor="adv"
-              >
-            Достоинства
-              </label>
-              <input
-                className="form-review__input"
-                id="adv"
-                type="text"
-                autoComplete="off"
-                required
-                onChange={({target}: ChangeEvent<HTMLInputElement>) => {
-                  const value = target.value;
-                  setUserAdvantage(value);
-                }}
-                value={userAdvantage}
-              />
-              <p className="form-review__warning">{userAdvantage === '' ? 'Заполните поле' : ''}</p>
-              <label
-                className="form-review__label form-review__label--required"
-                htmlFor="disadv"
-              >
-            Недостатки
-              </label>
-              <input
-                className="form-review__input"
-                id="disadv"
-                type="text"
-                autoComplete="off"
-                required
-                onChange={({target}: ChangeEvent<HTMLInputElement>) => {
-                  const value = target.value;
-                  setUserDisadvantage(value);
-                }}
-                value={userDisadvantage}
-              />
-              <p className="form-review__warning">{userDisadvantage === '' ? 'Заполните поле' : ''}</p>
-              <label
-                className="form-review__label form-review__label--required"
-                htmlFor="comment"
-              >
-            Комментарий
-              </label>
-              <textarea
-                className="form-review__input form-review__input--textarea"
-                id="comment"
-                rows={10}
-                autoComplete="off"
-                required
-                onChange={({target}: ChangeEvent<HTMLTextAreaElement>) => {
-                  const value = target.value;
-                  setUserComment(value);
-                }}
-                value={userComment}
-              />
-              <p className="form-review__warning">{userComment === '' ? 'Заполните поле' : ''}</p>
-              <button
-                className="button button--medium-20 form-review__button"
-                type="submit"
-              >
-            Отправить отзыв
-              </button>
-            </form>
-            <button
-              className="modal__close-btn button-cross"
-              type="button"
-              aria-label="Закрыть"
-              onClick={onEventShowModalReviewCallback}
+            </div>
+            <label
+              className="form-review__label form-review__label--required"
+              htmlFor="adv"
             >
-              <span className="button-cross__icon" />
-              <span className="modal__close-btn-interactive-area" />
+            Достоинства
+            </label>
+            <input
+              className="form-review__input"
+              id="adv"
+              type="text"
+              autoComplete="off"
+              required
+              onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                const value = target.value;
+                setUserAdvantage(value);
+              }}
+              value={userAdvantage}
+            />
+            <p className="form-review__warning">{userAdvantage === '' ? 'Заполните поле' : ''}</p>
+            <label
+              className="form-review__label form-review__label--required"
+              htmlFor="disadv"
+            >
+            Недостатки
+            </label>
+            <input
+              className="form-review__input"
+              id="disadv"
+              type="text"
+              autoComplete="off"
+              required
+              onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                const value = target.value;
+                setUserDisadvantage(value);
+              }}
+              value={userDisadvantage}
+            />
+            <p className="form-review__warning">{userDisadvantage === '' ? 'Заполните поле' : ''}</p>
+            <label
+              className="form-review__label form-review__label--required"
+              htmlFor="comment"
+            >
+            Комментарий
+            </label>
+            <textarea
+              className="form-review__input form-review__input--textarea"
+              id="comment"
+              rows={10}
+              autoComplete="off"
+              required
+              onChange={({target}: ChangeEvent<HTMLTextAreaElement>) => {
+                const value = target.value;
+                setUserComment(value);
+              }}
+              value={userComment}
+            />
+            <p className="form-review__warning">{userComment === '' ? 'Заполните поле' : ''}</p>
+            <button
+              className="button button--medium-20 form-review__button"
+              type="submit"
+            >
+            Отправить отзыв
             </button>
-          </div>
+          </form>
+          <button
+            className="modal__close-btn button-cross"
+            type="button"
+            aria-label="Закрыть"
+            onClick={onEventShowModalReviewCallback}
+          >
+            <span className="button-cross__icon" />
+            <span className="modal__close-btn-interactive-area" />
+          </button>
         </div>
       </div>
     </div>

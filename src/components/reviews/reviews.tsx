@@ -1,13 +1,14 @@
-import { useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/guitar-data/selectors';
 import { getCountReviews } from '../../store/guitar-process/selectors';
 import { Review } from '../../types/review';
-import ModalReview from '../modal-review/modal-review';
-import ModalSuccessReview from '../modal-success-review/modal-success-review';
 import ShowMoreButton from '../show-more-button/show-more-button';
 
-function Reviews(): JSX.Element {
+type ReviewsProps = {
+  onEventShowModalReviewCallback: () => void;
+};
+
+function Reviews({onEventShowModalReviewCallback}: ReviewsProps): JSX.Element {
   const reviews :Review[] = useAppSelector(getReviews);
   const countReviews = useAppSelector(getCountReviews);
 
@@ -15,9 +16,6 @@ function Reviews(): JSX.Element {
   const sortedReviews = reviewsForSort.sort((reviewA, reviewB) => (+(new Date(reviewB.createAt))) - (+(new Date(reviewA.createAt))));
 
   const sliceReviews = sortedReviews.slice(0, countReviews);
-
-  const [showModalReview, setShowModalReview] = useState(false);
-  const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
 
   function getRatingStars(ratingGuitar: number) {
     const raitingStarsItems = [];
@@ -36,13 +34,11 @@ function Reviews(): JSX.Element {
 
   return (
     <section className="reviews">
-      {showModalReview && <ModalReview onEventShowModalReviewCallback={() => setShowModalReview(false)} onEventShowModalSuccessReview={() => setShowModalSuccessReview(true)}/>}
-      {showModalSuccessReview && <ModalSuccessReview onEventsetShowModalSuccessReview={() => setShowModalSuccessReview(false)}/>}
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
       <a
         className="button button--red-border button--big reviews__sumbit-button"
         href="#todo"
-        onClick={() => setShowModalReview(true)}
+        onClick={onEventShowModalReviewCallback}
       >
             Оставить отзыв
       </a>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -8,6 +8,8 @@ import { loadGuitar } from '../../store/guitar-data/guitar-data';
 import { getGuitar, getReviews } from '../../store/guitar-data/selectors';
 import Footer from '../footer/footer';
 import Header from '../header/header';
+import ModalReview from '../modal-review/modal-review';
+import ModalSuccessReview from '../modal-success-review/modal-success-review';
 import Reviews from '../reviews/reviews';
 
 function GuitarScreen(): JSX.Element {
@@ -25,6 +27,9 @@ function GuitarScreen(): JSX.Element {
       store.dispatch(loadGuitar({guitar: null, reviews: []}));
     };
   }, [params.id]);
+
+  const [showModalReview, setShowModalReview] = useState(false);
+  const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
 
   function getRatingStars(ratingGuitar: number) {
     const raitingStarsItems = [];
@@ -55,11 +60,12 @@ function GuitarScreen(): JSX.Element {
     console.log('allert');
   });*/
 
-
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={showModalReview || showModalSuccessReview ? { height: '100vh' } : {}}>
       <Header/>
       <main className="page-content">
+        {showModalReview && <ModalReview onEventShowModalReviewCallback={() => setShowModalReview(false)} onEventShowModalSuccessReview={() => setShowModalSuccessReview(true)}/>}
+        {showModalSuccessReview && <ModalSuccessReview onEventsetShowModalSuccessReview={() => setShowModalSuccessReview(false)}/>}
         <div className="container">
           <h1 className="page-content__title title title--bigger">{selectedGuitar?.name}</h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
@@ -150,7 +156,7 @@ function GuitarScreen(): JSX.Element {
               </a>
             </div>
           </div>
-          <Reviews />
+          <Reviews onEventShowModalReviewCallback={() => setShowModalReview(true)}/>
         </div>
       </main>
       <Footer/>
