@@ -8,6 +8,9 @@ export const COUNT_GUITAR_CARD_IN_PAGE = 9;
 
 export const STEP_COUNT_REVIEWS = 3;
 
+export const KEYCODE_TAB = 9;
+export const KEYCODE_ESC = 27;
+
 export enum AppRoute {
   Main = '/catalog/page_:id',
   NotFoundScreen = '*',

@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { APIRoute } from '../../const';
+import { APIRoute, KEYCODE_ESC, KEYCODE_TAB } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { redirectToRoute } from '../../store/action';
@@ -26,19 +26,35 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
     store.dispatch(fetchGuitarAction(Number(selectedGuitar?.id)));
   }
 
-  const escFunction = useCallback((evt) => {
-    if (evt.keyCode === 27) {
+  const keyDownFunction = useCallback((evt) => {
+    const firstFocusableEl  = document.querySelector('#button-review');
+    const lastFocusableEl = document.querySelector('#button-close');
+
+    if (evt.keyCode === KEYCODE_ESC) {
       closePopup();
+    }
+    if (evt.keyCode === KEYCODE_TAB) {
+      if ( evt.shiftKey ) {
+        if (document.activeElement === firstFocusableEl) {
+          (lastFocusableEl as HTMLElement)?.focus();
+          evt.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastFocusableEl) {
+          (firstFocusableEl as HTMLElement)?.focus();
+          evt.preventDefault();
+        }
+      }
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', escFunction);
+    document.addEventListener('keydown', keyDownFunction);
 
     return () => {
-      document.removeEventListener('keydown', escFunction);
+      document.removeEventListener('keydown', keyDownFunction);
     };
-  }, [escFunction]);
+  }, [keyDownFunction]);
 
   return (
     <div className="modal is-active modal--success modal-for-ui-kit">
@@ -51,6 +67,7 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
           <p className="modal__message">Спасибо за ваш отзыв!</p>
           <div className="modal__button-container modal__button-container--review">
             <button
+              id="button-review"
               className="button button--small modal__button modal__button--review"
               onClick={() => closePopup()}
             >
@@ -58,6 +75,8 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
             </button>
           </div>
           <button
+            autoFocus
+            id="button-close"
             className="modal__close-btn button-cross"
             type="button"
             aria-label="Закрыть"

@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react';
-import { RatingStars } from '../../const';
+import { KEYCODE_ESC, KEYCODE_TAB, RatingStars } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { sendReviewAction } from '../../store/api-actions';
 import { getGuitar } from '../../store/guitar-data/selectors';
@@ -21,6 +21,9 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
   const [userRating, setUserRating] = useState(0);
 
   const dispatch = useAppDispatch();
+
+  const lastFocusableEl = document.querySelector('#button-submit');
+  const firstFocusableEl  = document.querySelector('#user-name');
 
   const sendReview = (reviewData: ReviewData) => {
     dispatch(sendReviewAction(reviewData));
@@ -78,19 +81,32 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
     );
   }
 
-  const escFunction = useCallback((evt) => {
-    if (evt.keyCode === 27) {
+  const keyDownFunction = useCallback((evt) => {
+    if (evt.keyCode === KEYCODE_ESC) {
       onEventShowModalReviewCallback();
     }
-  }, [onEventShowModalReviewCallback]);
+    if (evt.keyCode === KEYCODE_TAB) {
+      if ( evt.shiftKey ) {
+        if (document.activeElement === firstFocusableEl) {
+          (lastFocusableEl as HTMLElement)?.focus();
+          evt.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastFocusableEl) {
+          (firstFocusableEl as HTMLElement)?.focus();
+          evt.preventDefault();
+        }
+      }
+    }
+  }, [firstFocusableEl, lastFocusableEl, onEventShowModalReviewCallback]);
 
   useEffect(() => {
-    document.addEventListener('keydown', escFunction);
+    document.addEventListener('keydown', keyDownFunction);
 
     return () => {
-      document.removeEventListener('keydown', escFunction);
+      document.removeEventListener('keydown', keyDownFunction);
     };
-  }, [escFunction]);
+  }, [keyDownFunction]);
 
   return (
     <div className="modal is-active modal--review modal-for-ui-kit">
@@ -113,6 +129,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
                 Ваше Имя
                 </label>
                 <input
+                  autoFocus
                   className="form-review__input form-review__input--name"
                   id="user-name"
                   type="text"
@@ -196,6 +213,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
             <button
               className="button button--medium-20 form-review__button"
               type="submit"
+              id="button-submit"
             >
             Отправить отзыв
             </button>
