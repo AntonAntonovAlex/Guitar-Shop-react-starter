@@ -46,20 +46,6 @@ function GuitarScreen(): JSX.Element {
     );
   }
 
-  /* function onScrollList(event: React.UIEvent<HTMLDivElement>) {
-    const scrollBottom = event.target;
-
-    if (scrollBottom) {
-      // eslint-disable-next-line no-console
-      console.log('allert');
-    }
-  }*/
-
-  /*window.addEventListener('scroll', (e) => {
-    // eslint-disable-next-line no-console
-    console.log('allert');
-  });*/
-
   return (
     <div className="wrapper" style={showModalReview || showModalSuccessReview ? { height: '100vh' } : {}}>
       <Header/>
