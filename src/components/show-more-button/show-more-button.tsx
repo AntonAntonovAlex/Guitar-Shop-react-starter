@@ -27,7 +27,7 @@ function ShowMoreButton(): JSX.Element {
         dispatch(incrementCountReviews());
       }}
     >
-            Показать еще отзывы
+       Показать еще отзывы
     </button>
   );
 }
