@@ -104,7 +104,7 @@ function GuitarScreen(): JSX.Element {
                 >
                 Описание
                 </a>
-                <div className="tabs__content" id="characteristics">
+                <div className="tabs__content" id="characteristics_tabs">
                   <table className={isCharacteristics ? 'tabs__table' : 'tabs__table hidden'}>
                     <tbody>
                       <tr className="tabs__table-row">

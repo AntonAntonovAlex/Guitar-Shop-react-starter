@@ -18,13 +18,13 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
 
   const selectedGuitar = useAppSelector(getGuitar);
 
-  function closePopup() {
+  const closePopup = useCallback(()=> {
     onEventsetShowModalSuccessReview();
     dispatch(resetCountReviews());
     dispatch(redirectToRoute(`${APIRoute.Guitars}/${selectedGuitar?.id}#characteristics`));
     store.dispatch(loadGuitar({guitar: null, reviews: []}));
     store.dispatch(fetchGuitarAction(Number(selectedGuitar?.id)));
-  }
+  }, [dispatch, onEventsetShowModalSuccessReview, selectedGuitar?.id]);
 
   const keyDownFunction = useCallback((evt) => {
     const firstFocusableEl  = document.querySelector('#button-review');
@@ -46,7 +46,7 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
         }
       }
     }
-  }, []);
+  }, [closePopup]);
 
   useEffect(() => {
     document.addEventListener('keydown', keyDownFunction);

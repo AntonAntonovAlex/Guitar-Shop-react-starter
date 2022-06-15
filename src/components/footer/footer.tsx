@@ -2,7 +2,7 @@ function Footer(): JSX.Element {
   return (
     <footer className="footer">
       <div className="footer__container container">
-        <a className="footer__logo logo">
+        <a className="footer__logo logo" href="/">
           <img
             className="logo__img"
             width={70}

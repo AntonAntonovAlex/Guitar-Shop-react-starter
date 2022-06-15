@@ -1,6 +1,7 @@
 import { datatype, image, internet, lorem, random } from 'faker';
 import { Guitar } from '../types/guitar';
 import { Review } from '../types/review';
+import { ReviewData } from '../types/review-data';
 
 export const makeFakeGuitar = (): Guitar => ({
   id: datatype.number(),
@@ -24,3 +25,12 @@ export const makeFakeReviews = (): Review => ({
   createAt: datatype.string(),
   guitarId: datatype.number(),
 } as Review);
+
+export const makeFakeReviewData = (): ReviewData => ({
+  guitarId: datatype.number(),
+  userName: internet.userName(),
+  advantage: random.words(),
+  disadvantage: random.words(),
+  comment: random.words(),
+  rating: datatype.number(),
+} as ReviewData);

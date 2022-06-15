@@ -4,9 +4,9 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { makeFakeGuitar } from '../mocks/mocks';
+import { makeFakeGuitar, makeFakeReviewData } from '../mocks/mocks';
 import { APIRoute } from '../const';
-import { fetchGuitarAction, fetchGuitarsAction } from './api-actions';
+import { fetchGuitarAction, fetchGuitarsAction, sendReviewAction } from './api-actions';
 import { loadGuitar, loadGuitars } from './guitar-data/guitar-data';
 
 describe('Async actions', () => {
@@ -48,6 +48,22 @@ describe('Async actions', () => {
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions).toContain(loadGuitar.toString());
+  });
+
+  it('should dispatch closeModalReviewCallback and showModalSuccessReview when POST /comments', async () => {
+    const reviewData = makeFakeReviewData();
+
+    mockAPI
+      .onPost(APIRoute.Comments)
+      .reply(200);
+
+
+    const store = mockStore();
+    Storage.prototype.setItem = jest.fn();
+
+    await store.dispatch(sendReviewAction(reviewData));
+
+    expect(Storage.prototype.setItem).toBeCalledTimes(1);
   });
 
 });

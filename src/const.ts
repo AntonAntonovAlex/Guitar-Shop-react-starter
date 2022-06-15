@@ -15,7 +15,6 @@ export enum AppRoute {
   Main = '/catalog/page_:id',
   NotFoundScreen = '*',
   Guitars = '/guitars/:id',
-  //StartScreen = '/',
 }
 
 export enum NameSpace {

@@ -22,7 +22,7 @@ function MainScreen(): JSX.Element {
     return () => {
       store.dispatch(loadGuitars({guitars: [], isDataLoadediews: false}));
     };
-  }, [params.id]);
+  }, [dispatch, params.id]);
 
   const guitarsList: Guitar[] = useAppSelector(getGuitars);
 
