@@ -1,44 +1,32 @@
 import { Link } from 'react-router-dom';
 import { Guitar } from '../../types/guitar';
+import RatingStar from '../rating-star/rating-star';
 
 type GuitarCardProps = {
   guitar: Guitar;
 }
 
+const widthStar = 12;
+const heightStar = 11;
+
 function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
-  const {price, name, previewImg, id, rating} = guitar;
-
-  function getRatingStars(ratingGuitar: number) {
-    const raitingStarsItems = [];
-
-    for (let i = 0; i < 5; i++) {
-      raitingStarsItems.push(
-        <svg width={12} height={11} aria-hidden="true" key={`svg_star-${i}`}>
-          <use xlinkHref={ratingGuitar > i ? '#icon-full-star' : '#icon-star'}/>
-        </svg>,
-      );
-    }
-    return (
-      raitingStarsItems
-    );
-  }
+  const {price, name, previewImg, id, rating, comments} = guitar;
 
   return (
     <div className="product-card">
       <img
         src={`../${previewImg}`}
-        srcSet={`../${previewImg}@2x.jpg 2x`}
+        srcSet={`../${previewImg} 2x`}
         width={75}
         height={190}
         alt={name}
       />
       <div className="product-card__info">
         <div className="rate product-card__rate">
-          {getRatingStars(rating)}
-
+          <RatingStar ratingGuitar={rating} widthStar={widthStar} heightStar={heightStar} />
           <p className="visually-hidden">Рейтинг: Хорошо</p>
           <p className="rate__count">
-            <span className="visually-hidden">Всего оценок:</span>9
+            <span className="visually-hidden">Всего оценок:</span>{comments.length}
           </p>
         </div>
         <p className="product-card__title">{name}</p>

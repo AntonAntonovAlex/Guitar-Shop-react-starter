@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
@@ -10,9 +10,13 @@ import Footer from '../footer/footer';
 import Header from '../header/header';
 import ModalReview from '../modal-review/modal-review';
 import ModalSuccessReview from '../modal-success-review/modal-success-review';
+import RatingStar from '../rating-star/rating-star';
 import Reviews from '../reviews/reviews';
 
 function GuitarScreen(): JSX.Element {
+  const widthStar = 14;
+  const heightStar = 14;
+
   const params = useParams();
 
   const location = useLocation();
@@ -30,21 +34,6 @@ function GuitarScreen(): JSX.Element {
 
   const [showModalReview, setShowModalReview] = useState(false);
   const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
-
-  function getRatingStars(ratingGuitar: number) {
-    const raitingStarsItems = [];
-
-    for (let i = 0; i < 5; i++) {
-      raitingStarsItems.push(
-        <svg width={14} height={14} aria-hidden="true" key={`svg_star-${i}`}>
-          <use xlinkHref={ratingGuitar > i ? '#icon-full-star' : '#icon-star'}/>
-        </svg>,
-      );
-    }
-    return (
-      raitingStarsItems
-    );
-  }
 
   return (
     <div className="wrapper" style={showModalReview || showModalSuccessReview ? { height: '100vh' } : {}}>
@@ -83,27 +72,27 @@ function GuitarScreen(): JSX.Element {
                 {selectedGuitar?.name}
               </h2>
               <div className="rate product-container__rating">
-                {getRatingStars((selectedGuitar?.rating)? selectedGuitar.rating : 0)}
+                <RatingStar ratingGuitar={(selectedGuitar?.rating)? selectedGuitar.rating : 0} widthStar={widthStar} heightStar={heightStar} />
                 <p className="visually-hidden">Оценка: Хорошо</p>
                 <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{guitarReviews.length}</p>
               </div>
               <div className="tabs">
-                <a
+                <Link
                   className={isCharacteristics ?
                     'button button--medium tabs__button' :
                     'button button--medium tabs__button button--black-border'}
-                  href="#characteristics"
+                  to='#characteristics'
                 >
                 Характеристики
-                </a>
-                <a
+                </Link>
+                <Link
                   className={isCharacteristics ?
                     'button button--medium tabs__button button--black-border' :
                     'button button--medium tabs__button'}
-                  href="#description"
+                  to='#description'
                 >
                 Описание
-                </a>
+                </Link>
                 <div className="tabs__content" id="characteristics_tabs">
                   <table className={isCharacteristics ? 'tabs__table' : 'tabs__table hidden'}>
                     <tbody>

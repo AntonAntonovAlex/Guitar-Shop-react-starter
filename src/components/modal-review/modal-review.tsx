@@ -22,7 +22,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
 
   const dispatch = useAppDispatch();
 
-  const lastFocusableEl = document.querySelector('#button-submit');
+  const lastFocusableEl = document.querySelector('#button-close');
   const firstFocusableEl  = document.querySelector('#user-name');
 
   const sendReview = (reviewData: ReviewData) => {
@@ -220,6 +220,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
           </form>
           <button
             className="modal__close-btn button-cross"
+            id="button-close"
             type="button"
             aria-label="Закрыть"
             onClick={onEventShowModalReviewCallback}

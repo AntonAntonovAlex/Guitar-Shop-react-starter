@@ -2,6 +2,7 @@ import { useAppSelector } from '../../hooks';
 import { getReviews } from '../../store/guitar-data/selectors';
 import { getCountReviews } from '../../store/guitar-process/selectors';
 import { Review } from '../../types/review';
+import RatingStar from '../rating-star/rating-star';
 import ShowMoreButton from '../show-more-button/show-more-button';
 
 type ReviewsProps = {
@@ -9,6 +10,9 @@ type ReviewsProps = {
 };
 
 function Reviews({onEventShowModalReviewCallback}: ReviewsProps): JSX.Element {
+  const widthStar = 16;
+  const heightStar = 16;
+
   const reviews :Review[] = useAppSelector(getReviews);
   const countReviews = useAppSelector(getCountReviews);
 
@@ -16,21 +20,6 @@ function Reviews({onEventShowModalReviewCallback}: ReviewsProps): JSX.Element {
   const sortedReviews = reviewsForSort.sort((reviewA, reviewB) => (+(new Date(reviewB.createAt))) - (+(new Date(reviewA.createAt))));
 
   const sliceReviews = sortedReviews.slice(0, countReviews);
-
-  function getRatingStars(ratingGuitar: number) {
-    const raitingStarsItems = [];
-
-    for (let i = 0; i < 5; i++) {
-      raitingStarsItems.push(
-        <svg width={16} height={16} aria-hidden="true" key={`svg_star-${i}`}>
-          <use xlinkHref={ratingGuitar > i ? '#icon-full-star' : '#icon-star'} />
-        </svg>,
-      );
-    }
-    return (
-      raitingStarsItems
-    );
-  }
 
   return (
     <section className="reviews">
@@ -51,7 +40,7 @@ function Reviews({onEventShowModalReviewCallback}: ReviewsProps): JSX.Element {
             <span className="review__date">{new Date(review.createAt).toLocaleDateString('ru-RU', { month: 'long', day: 'numeric' })}</span>
           </div>
           <div className="rate review__rating-panel">
-            {getRatingStars(review.rating)}
+            <RatingStar ratingGuitar={review.rating} widthStar={widthStar} heightStar={heightStar} />
             <p className="visually-hidden">Оценка: Хорошо</p>
           </div>
           <h4 className="review__title title title--lesser">Достоинства:</h4>

@@ -1,4 +1,5 @@
 export type Guitar = {
+    comments: [];
     id: number;
     name: string;
     vendorCode: string;
