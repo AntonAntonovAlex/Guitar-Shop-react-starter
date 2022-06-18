@@ -9,7 +9,9 @@ function NotFoundScreen(): JSX.Element {
       <main className="page-content">
         <header className="header">
           <p className="page-content__title title title--bigger">404 Not Found</p>
-          <Link to='/' className="page-content__title title title--bigger">На главную</Link>
+          <p>
+            <Link to='/' className="page-content__title title title--bigger">На главную</Link>
+          </p>
         </header>
       </main>
       <Footer />

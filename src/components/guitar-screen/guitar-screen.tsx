@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { GuitarType } from '../../const';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarAction } from '../../store/api-actions';
@@ -18,9 +17,9 @@ function GuitarScreen(): JSX.Element {
   const heightStar = 14;
 
   const params = useParams();
-
-  const location = useLocation();
-  const isCharacteristics = location.hash !== '#description';
+//dfgdfg
+  //const location = useLocation();
+  //const isCharacteristics = location.hash !== '#description';
 
   const selectedGuitar = useAppSelector(getGuitar);
   const guitarReviews = useAppSelector(getReviews);
@@ -34,6 +33,8 @@ function GuitarScreen(): JSX.Element {
 
   const [showModalReview, setShowModalReview] = useState(false);
   const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
+
+  const [isCharacteristics, setIsCharacteristics] = useState(true);
 
   return (
     <div className="wrapper" style={showModalReview || showModalSuccessReview ? { height: '100vh' } : {}}>
@@ -81,7 +82,8 @@ function GuitarScreen(): JSX.Element {
                   className={isCharacteristics ?
                     'button button--medium tabs__button' :
                     'button button--medium tabs__button button--black-border'}
-                  to='#characteristics'
+                  to='characteristics'
+                  onClick={() => setIsCharacteristics(true)}
                 >
                 Характеристики
                 </Link>
@@ -89,30 +91,13 @@ function GuitarScreen(): JSX.Element {
                   className={isCharacteristics ?
                     'button button--medium tabs__button button--black-border' :
                     'button button--medium tabs__button'}
-                  to='#description'
+                  to='description'
+                  onClick={() => setIsCharacteristics(false)}
                 >
                 Описание
                 </Link>
                 <div className="tabs__content" id="characteristics_tabs">
-                  <table className={isCharacteristics ? 'tabs__table' : 'tabs__table hidden'}>
-                    <tbody>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Артикул:</td>
-                        <td className="tabs__value">{selectedGuitar?.vendorCode}</td>
-                      </tr>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Тип:</td>
-                        <td className="tabs__value">{(selectedGuitar?.type)? GuitarType[selectedGuitar.type] : ''} </td>
-                      </tr>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Количество струн:</td>
-                        <td className="tabs__value">{selectedGuitar?.stringCount} струнная</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p className={isCharacteristics ? 'tabs__product-description hidden' : 'tabs__product-description' }>
-                    {selectedGuitar?.description}
-                  </p>
+                  <Outlet/>
                 </div>
               </div>
             </div>
