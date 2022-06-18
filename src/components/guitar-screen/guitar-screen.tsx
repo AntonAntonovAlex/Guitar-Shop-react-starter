@@ -17,9 +17,6 @@ function GuitarScreen(): JSX.Element {
   const heightStar = 14;
 
   const params = useParams();
-//dfgdfg
-  //const location = useLocation();
-  //const isCharacteristics = location.hash !== '#description';
 
   const selectedGuitar = useAppSelector(getGuitar);
   const guitarReviews = useAppSelector(getReviews);
@@ -33,7 +30,6 @@ function GuitarScreen(): JSX.Element {
 
   const [showModalReview, setShowModalReview] = useState(false);
   const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
-
   const [isCharacteristics, setIsCharacteristics] = useState(true);
 
   return (
