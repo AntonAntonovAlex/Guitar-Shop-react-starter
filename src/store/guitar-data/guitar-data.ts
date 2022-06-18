@@ -5,7 +5,7 @@ import { GuitarData } from '../../types/state';
 
 const initialState: GuitarData = {
   guitars: [],
-  isDataLoaded: false,
+  isDataLoaded: true,
   guitar: null,
   reviews: [],
   countGuitars: 0,

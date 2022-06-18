@@ -21,7 +21,7 @@ function ModalSuccessReview({onEventsetShowModalSuccessReview}: ModalSuccessRevi
   const closePopup = useCallback(()=> {
     onEventsetShowModalSuccessReview();
     dispatch(resetCountReviews());
-    dispatch(redirectToRoute(`${APIRoute.Guitars}/${selectedGuitar?.id}#characteristics`));
+    dispatch(redirectToRoute(`${APIRoute.Guitars}/${selectedGuitar?.id}/characteristics`));
     store.dispatch(loadGuitar({guitar: null, reviews: []}));
     store.dispatch(fetchGuitarAction(Number(selectedGuitar?.id)));
   }, [dispatch, onEventsetShowModalSuccessReview, selectedGuitar?.id]);

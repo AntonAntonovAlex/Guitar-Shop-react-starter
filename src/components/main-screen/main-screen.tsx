@@ -20,7 +20,7 @@ function MainScreen(): JSX.Element {
     dispatch(changeActivPage(Number(params.id)));
     store.dispatch(fetchGuitarsAction(Number(params.id)));
     return () => {
-      store.dispatch(loadGuitars({guitars: [], isDataLoadediews: false}));
+      store.dispatch(loadGuitars({guitars: [], isDataLoaded: false}));
     };
   }, [dispatch, params.id]);
 
