@@ -2,7 +2,6 @@ import { GuitarType } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getGuitar } from '../../store/guitar-data/selectors';
 
-
 function GuitarCharacteristics(): JSX.Element {
   const selectedGuitar = useAppSelector(getGuitar);
 
