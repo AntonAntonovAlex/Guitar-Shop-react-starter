@@ -58,8 +58,8 @@ function GuitarScreen(): JSX.Element {
           <div className="product-container">
             <img
               className="product-container__img"
-              src={`../${selectedGuitar?.previewImg}`}
-              srcSet={`../${selectedGuitar?.previewImg} 2x`}
+              src={`../../${selectedGuitar?.previewImg}`}
+              srcSet={`../../${selectedGuitar?.previewImg} 2x`}
               width={90}
               height={235}
               alt=""

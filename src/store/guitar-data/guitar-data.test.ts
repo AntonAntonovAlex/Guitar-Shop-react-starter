@@ -10,7 +10,7 @@ describe('Reducer: guitarData', () => {
     expect(guitarData.reducer(void 0, {type: 'UNKNOWN_ACTION'}))
       .toEqual({
         guitars: [],
-        isDataLoaded: false,
+        isDataLoaded: true,
         guitar: null,
         reviews: [],
         countGuitars: 0});
