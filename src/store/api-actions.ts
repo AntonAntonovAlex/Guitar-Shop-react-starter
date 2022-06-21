@@ -13,7 +13,7 @@ export const fetchGuitarsAction = createAsyncThunk<void, number, {
     state: State,
     extra: AxiosInstance
   }>(
-    'fetchGuitars',
+    'DATA/loadGuitars',
     async (id, {dispatch, extra: api}) => {
       try {
         const response = await api.get(`${APIRoute.Guitars}?_start=${(id-1)*9}&_limit=${COUNT_GUITAR_CARD_IN_PAGE}&_embed=comments`);
@@ -30,7 +30,7 @@ export const fetchGuitarAction = createAsyncThunk<void, number, {
     state: State,
     extra: AxiosInstance
   }>(
-    'fetchGuitar',
+    'DATA/loadGuitar',
     async (id, {dispatch, extra: api}) => {
       try {
         const {data: guitar} = await api.get<Guitar>(`${APIRoute.Guitars}/${id}`);

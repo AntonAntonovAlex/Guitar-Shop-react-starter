@@ -4,15 +4,21 @@ import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
 import HistoryRouter from '../history-route/history-route';
 import MainScreen from './main-screen';
+import { makeFakeGuitar } from '../../mocks/mocks';
 
 const mockStore = configureMockStore();
+const guitars = [makeFakeGuitar(), makeFakeGuitar()];
 
 describe('Component: MainScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+    const store = mockStore({
+      DATA: {guitars: guitars},
+      GUITAR: {activPage: 1},
+    });
 
     render(
-      <Provider store={mockStore({})}>
+      <Provider store={store}>
         <HistoryRouter history={history}>
           <MainScreen />
         </HistoryRouter>

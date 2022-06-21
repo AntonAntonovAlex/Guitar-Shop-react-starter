@@ -11,8 +11,13 @@ describe('Component: PaginationList', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
+    const store = mockStore({
+      DATA: {countGuitars: 5},
+      GUITAR: {activPage: 1},
+    });
+
     render(
-      <Provider store={mockStore({})}>
+      <Provider store={store}>
         <HistoryRouter history={history}>
           <PaginationList />
         </HistoryRouter>

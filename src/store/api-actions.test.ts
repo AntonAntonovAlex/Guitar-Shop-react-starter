@@ -32,7 +32,7 @@ describe('Async actions', () => {
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain(loadGuitars.toString());
+    expect(actions[0]).toContain(loadGuitars.toString());
   });
 
   it('should dispatch Load_Guitar when GET /guitar', async () => {
@@ -47,16 +47,15 @@ describe('Async actions', () => {
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain(loadGuitar.toString());
+    expect(actions[0]).toContain(loadGuitar.toString());
   });
 
-  it('should dispatch closeModalReviewCallback and showModalSuccessReview when POST /comments', async () => {
+  it('should dispatch when POST /comments', async () => {
     const reviewData = makeFakeReviewData();
 
     mockAPI
       .onPost(APIRoute.Comments)
       .reply(200);
-
 
     const store = mockStore();
     Storage.prototype.setItem = jest.fn();

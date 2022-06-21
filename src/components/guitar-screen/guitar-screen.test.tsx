@@ -4,23 +4,30 @@ import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
 import HistoryRouter from '../history-route/history-route';
 import GuitarScreen from './guitar-screen';
+import { makeFakeGuitar, makeFakeReviews } from '../../mocks/mocks';
 
 const mockStore = configureMockStore();
+const guitar = makeFakeGuitar();
+const reviews = [makeFakeReviews(), makeFakeReviews()];
 
 describe('Component: GuitarScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+    const store = mockStore({
+      DATA: {guitar: guitar, reviews: reviews},
+      GUITAR: {countReviews: 3},
+    });
 
     render(
-      <Provider store={mockStore({})}>
+      <Provider store={store}>
         <HistoryRouter history={history}>
           <GuitarScreen />
         </HistoryRouter>
       </Provider>,
     );
 
-    expect(screen.getByText(/Артикул/i)).toBeInTheDocument();
-    expect(screen.getByText(/Количество струн/i)).toBeInTheDocument();
-    expect(screen.getByText(/Цена/i)).toBeInTheDocument();
+    expect(screen.getByText(/Характеристики/i)).toBeInTheDocument();
+    expect(screen.getByText(/Описание/i)).toBeInTheDocument();
+    expect(screen.getByText(/Добавить в корзину/i)).toBeInTheDocument();
   });
 });

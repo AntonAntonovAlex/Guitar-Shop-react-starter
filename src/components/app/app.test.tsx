@@ -5,11 +5,14 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import HistoryRouter from '../history-route/history-route';
 import { AppRoute } from '../../const';
+import { makeFakeGuitar } from '../../mocks/mocks';
 
 const mockStore = configureMockStore();
+const guitars = [makeFakeGuitar(), makeFakeGuitar()];
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
+  DATA: {isDataLoaded: true, guitars: guitars},
+  GUITAR: {activPage: 1},
 });
 
 const history = createMemoryHistory();

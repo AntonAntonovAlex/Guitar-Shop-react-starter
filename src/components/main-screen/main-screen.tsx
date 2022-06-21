@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarsAction } from '../../store/api-actions';
-import { loadGuitars } from '../../store/guitar-data/guitar-data';
 import { getGuitars } from '../../store/guitar-data/selectors';
 import { changeActivPage } from '../../store/guitar-process/guitar-process';
 import { Guitar } from '../../types/guitar';
@@ -19,9 +18,6 @@ function MainScreen(): JSX.Element {
   useEffect(() => {
     dispatch(changeActivPage(Number(params.id)));
     store.dispatch(fetchGuitarsAction(Number(params.id)));
-    return () => {
-      store.dispatch(loadGuitars({guitars: [], isDataLoaded: false}));
-    };
   }, [dispatch, params.id]);
 
   const guitarsList: Guitar[] = useAppSelector(getGuitars);

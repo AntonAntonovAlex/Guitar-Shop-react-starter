@@ -13,6 +13,7 @@ export const makeFakeGuitar = (): Guitar => ({
   stringCount: datatype.number(),
   rating: datatype.number(),
   price: datatype.number(),
+  comments: datatype.array(2),
 } as Guitar);
 
 export const makeFakeReviews = (): Review => ({
