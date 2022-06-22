@@ -46,7 +46,7 @@ export const sendReviewAction = createAsyncThunk<void, ReviewData, {
     state: State,
     extra: AxiosInstance
   }>(
-    'review',
+    'DATA/review',
     async ({guitarId, userName, advantage, disadvantage, comment, rating, closeModalReviewCallback, showModalSuccessReview}, {extra: api}) => {
       try {
         await api.post<ReviewData>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});

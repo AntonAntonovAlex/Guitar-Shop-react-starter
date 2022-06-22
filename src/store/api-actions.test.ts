@@ -58,11 +58,13 @@ describe('Async actions', () => {
       .reply(200);
 
     const store = mockStore();
-    Storage.prototype.setItem = jest.fn();
 
     await store.dispatch(sendReviewAction(reviewData));
 
-    expect(Storage.prototype.setItem).toBeCalledTimes(1);
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions[0]).toContain('DATA/review');
+
   });
 
 });
