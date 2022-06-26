@@ -20,6 +20,8 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
   const [userComment, setUserComment] = useState('');
   const [userRating, setUserRating] = useState(0);
 
+  const [submitedForm, setSubmitedForm] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const lastFocusableEl = document.querySelector('#button-close');
@@ -141,7 +143,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
                   }}
                   value={userName}
                 />
-                <p className="form-review__warning">{userName === '' ? 'Заполните поле' : ''}</p>
+                <p className="form-review__warning">{userName === '' && submitedForm ? 'Заполните поле' : '\u00A0'}</p>
               </div>
               <div>
                 <span className="form-review__label form-review__label--required">
@@ -149,7 +151,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
                 </span>
                 <div className="rate rate--reverse">
                   {getRatingStars()}
-                  <p className="rate__message">{userRating === 0 ? 'Поставьте оценку' : ''}</p>
+                  <p className="rate__message">{userRating === 0 && submitedForm ? 'Поставьте оценку' : ''}</p>
                 </div>
               </div>
             </div>
@@ -171,7 +173,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
               }}
               value={userAdvantage}
             />
-            <p className="form-review__warning">{userAdvantage === '' ? 'Заполните поле' : ''}</p>
+            <p className="form-review__warning">{userAdvantage === '' && submitedForm ? 'Заполните поле' : '\u00A0'}</p>
             <label
               className="form-review__label form-review__label--required"
               htmlFor="disadv"
@@ -190,7 +192,7 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
               }}
               value={userDisadvantage}
             />
-            <p className="form-review__warning">{userDisadvantage === '' ? 'Заполните поле' : ''}</p>
+            <p className="form-review__warning">{userDisadvantage === '' && submitedForm ? 'Заполните поле' : '\u00A0'}</p>
             <label
               className="form-review__label form-review__label--required"
               htmlFor="comment"
@@ -209,11 +211,12 @@ function ModalReview({onEventShowModalReviewCallback, onEventShowModalSuccessRev
               }}
               value={userComment}
             />
-            <p className="form-review__warning">{userComment === '' ? 'Заполните поле' : ''}</p>
+            <p className="form-review__warning">{userComment === '' && submitedForm ? 'Заполните поле' : '\u00A0'}</p>
             <button
               className="button button--medium-20 form-review__button"
               type="submit"
               id="button-submit"
+              onClick={() => setSubmitedForm(true)}
             >
             Отправить отзыв
             </button>
