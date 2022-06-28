@@ -9,6 +9,7 @@ const initialState: GuitarData = {
   guitar: null,
   reviews: [],
   countGuitars: 0,
+  similarGuitars: [],
 };
 
 export const guitarData = createSlice({
@@ -28,7 +29,10 @@ export const guitarData = createSlice({
     loadCountGuitars: (state, action) => {
       state.countGuitars = action.payload;
     },
+    loadSimilarGuitars: (state, action) => {
+      state.similarGuitars = action.payload;
+    },
   },
 });
 
-export const {loadGuitars, loadGuitar, loadCountGuitars} = guitarData.actions;
+export const {loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars} = guitarData.actions;

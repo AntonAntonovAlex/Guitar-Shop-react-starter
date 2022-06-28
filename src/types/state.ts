@@ -8,6 +8,7 @@ export type GuitarData = {
     guitar: Guitar | null,
     reviews: Review[],
     countGuitars: number,
+    similarGuitars: Guitar[],
 };
 
 export type GuitarProcess = {

@@ -1,4 +1,18 @@
+import { ChangeEvent } from 'react';
+import { store } from '../../store';
+import { fetchSimilarGuitarsAction } from '../../store/api-actions';
+
 function Header(): JSX.Element {
+
+  //const [searchText, setSearchText] = useState('');
+
+  function getListSimilarGuitars(searchText: string) {
+    store.dispatch(fetchSimilarGuitarsAction(searchText));
+    // eslint-disable-next-line no-console
+    console.log(searchText);
+  }
+
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
@@ -49,6 +63,13 @@ function Header(): JSX.Element {
               type="text"
               autoComplete="off"
               placeholder="что вы ищите?"
+              onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                const value = target.value;
+                //setSearchText(value);
+                getListSimilarGuitars(value);
+              }}
+              //value={searchText}
+              //onInput={() => getListSimilarGuitars()}
             />
             <label className="visually-hidden" htmlFor="search">
               Поиск

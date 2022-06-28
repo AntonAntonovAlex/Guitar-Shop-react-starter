@@ -6,7 +6,7 @@ import { Guitar } from '../types/guitar';
 import { Review } from '../types/review';
 import { ReviewData } from '../types/review-data';
 import { AppDispatch, State } from '../types/state';
-import { loadGuitars, loadGuitar, loadCountGuitars } from './guitar-data/guitar-data';
+import { loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars } from './guitar-data/guitar-data';
 
 export const fetchGuitarsAction = createAsyncThunk<void, number, {
     dispatch: AppDispatch,
@@ -52,6 +52,22 @@ export const sendReviewAction = createAsyncThunk<void, ReviewData, {
         await api.post<ReviewData>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});
         closeModalReviewCallback();
         showModalSuccessReview();
+      } catch (error) {
+        errorHandle(error);
+      }
+    },
+  );
+
+export const fetchSimilarGuitarsAction = createAsyncThunk<void, string, {
+    dispatch: AppDispatch,
+    state: State,
+    extra: AxiosInstance
+  }>(
+    'DATA/loadSimilarGuitars',
+    async (name, {dispatch, extra: api}) => {
+      try {
+        const response = await api.get(`${APIRoute.Guitars}?name_like=${name}`);
+        dispatch(loadSimilarGuitars(response.data));
       } catch (error) {
         errorHandle(error);
       }
