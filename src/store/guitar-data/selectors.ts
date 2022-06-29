@@ -8,3 +8,4 @@ export const getLoadedDataStatus = (state: State): boolean => state[NameSpace.Da
 export const getGuitar = (state: State): Guitar | null => state[NameSpace.Data].guitar;
 export const getReviews = (state: State): Review[] => state[NameSpace.Data].reviews;
 export const getCountGuitars = (state: State): number => state[NameSpace.Data].countGuitars;
+export const getSimilarGuitars = (state: State): Guitar[] => state[NameSpace.Data].similarGuitars;

@@ -1,15 +1,25 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { APIRoute } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
+import { redirectToRoute } from '../../store/action';
 import { fetchSimilarGuitarsAction } from '../../store/api-actions';
+import { loadSimilarGuitars } from '../../store/guitar-data/guitar-data';
+import { getSimilarGuitars } from '../../store/guitar-data/selectors';
+import { Guitar } from '../../types/guitar';
 
 function Header(): JSX.Element {
 
-  //const [searchText, setSearchText] = useState('');
+  const [searchUserText, setSearchUserText] = useState('');
+  const similarGuitarsList: Guitar[] = useAppSelector(getSimilarGuitars);
+
+  // eslint-disable-next-line no-console
+  console.log(similarGuitarsList);
+
+  const dispatch = useAppDispatch();
 
   function getListSimilarGuitars(searchText: string) {
     store.dispatch(fetchSimilarGuitarsAction(searchText));
-    // eslint-disable-next-line no-console
-    console.log(searchText);
   }
 
 
@@ -65,40 +75,40 @@ function Header(): JSX.Element {
               placeholder="что вы ищите?"
               onChange={({target}: ChangeEvent<HTMLInputElement>) => {
                 const value = target.value;
-                //setSearchText(value);
+                setSearchUserText(value);
                 getListSimilarGuitars(value);
               }}
-              //value={searchText}
+              value={searchUserText}
               //onInput={() => getListSimilarGuitars()}
             />
             <label className="visually-hidden" htmlFor="search">
               Поиск
             </label>
           </form>
-          <ul className="form-search__select-list hidden">
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер Plus
-            </li>
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер UX
-            </li>
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер UX2
-            </li>
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер UX3
-            </li>
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер UX4
-            </li>
-            <li className="form-search__select-item" tabIndex={0}>
-              Четстер UX5
-            </li>
+          <ul className={similarGuitarsList.length === 0 ? 'form-search__select-list hidden' : 'form-search__select-list'}>
+            {similarGuitarsList?.map((similarGuitar: Guitar)=> (
+              <li className="form-search__select-item"
+                tabIndex={0}
+                key={similarGuitar.id}
+                onClick={() => {
+                  dispatch(redirectToRoute(`${APIRoute.Guitars}/${similarGuitar?.id}/characteristics`));
+                  setSearchUserText('');
+                  dispatch(loadSimilarGuitars([]));
+                }}
+              >
+                {similarGuitar.name}
+              </li>
+            ))}
           </ul>
           <button
             className="form-search__reset"
             type="reset"
             form="form-search"
+            style={similarGuitarsList.length === 0 ? {} : {display: 'block'}}
+            onClick={() => {
+              setSearchUserText('');
+              dispatch(loadSimilarGuitars([]));
+            }}
           >
             <svg
               className="form-search__icon"
