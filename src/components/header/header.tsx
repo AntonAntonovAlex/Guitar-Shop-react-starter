@@ -13,15 +13,11 @@ function Header(): JSX.Element {
   const [searchUserText, setSearchUserText] = useState('');
   const similarGuitarsList: Guitar[] = useAppSelector(getSimilarGuitars);
 
-  // eslint-disable-next-line no-console
-  console.log(similarGuitarsList);
-
   const dispatch = useAppDispatch();
 
   function getListSimilarGuitars(searchText: string) {
     store.dispatch(fetchSimilarGuitarsAction(searchText));
   }
-
 
   return (
     <header className="header" id="header">
@@ -79,7 +75,6 @@ function Header(): JSX.Element {
                 getListSimilarGuitars(value);
               }}
               value={searchUserText}
-              //onInput={() => getListSimilarGuitars()}
             />
             <label className="visually-hidden" htmlFor="search">
               Поиск

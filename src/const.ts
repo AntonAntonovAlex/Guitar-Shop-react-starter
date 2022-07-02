@@ -48,3 +48,13 @@ export const RatingStars: TypesRatingStars = {
   4: 'Хорошо',
   5: 'Отлично',
 };
+
+export enum SortTypes {
+  Price = 'price',
+  Rating = 'rating',
+}
+
+export enum OrderTypes {
+  Asc = 'asc',
+  Desc = 'desc',
+}

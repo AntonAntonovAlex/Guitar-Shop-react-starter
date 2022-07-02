@@ -6,17 +6,18 @@ import { Guitar } from '../types/guitar';
 import { Review } from '../types/review';
 import { ReviewData } from '../types/review-data';
 import { AppDispatch, State } from '../types/state';
+import { UrlData } from '../types/url-data';
 import { loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars } from './guitar-data/guitar-data';
 
-export const fetchGuitarsAction = createAsyncThunk<void, number, {
+export const fetchGuitarsAction = createAsyncThunk<void, UrlData, {
     dispatch: AppDispatch,
     state: State,
     extra: AxiosInstance
   }>(
     'DATA/loadGuitars',
-    async (id, {dispatch, extra: api}) => {
+    async ({id, sortType}, {dispatch, extra: api}) => {
       try {
-        const response = await api.get(`${APIRoute.Guitars}?_start=${(id-1)*9}&_limit=${COUNT_GUITAR_CARD_IN_PAGE}&_embed=comments`);
+        const response = await api.get(`${APIRoute.Guitars}?${sortType}_start=${(id-1)*9}&_limit=${COUNT_GUITAR_CARD_IN_PAGE}&_embed=comments`);
         dispatch(loadGuitars(response.data));
         dispatch(loadCountGuitars(response.headers['x-total-count']));
       } catch (error) {

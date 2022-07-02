@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { OrderTypes, SortTypes } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarsAction } from '../../store/api-actions';
@@ -15,10 +16,21 @@ function MainScreen(): JSX.Element {
   const params = useParams();
   const dispatch = useAppDispatch();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   useEffect(() => {
+    const getSortType = (searchParamsUrl: string | null) => {
+      let sortType = '';
+      if (searchParamsUrl) {
+        sortType = searchParams.get('order') ?
+          `_sort=${searchParamsUrl}&_order=${searchParams.get('order')}&` :
+          `_sort=${searchParamsUrl}&`;
+      }
+      return sortType;
+    };
     dispatch(changeActivPage(Number(params.id)));
-    store.dispatch(fetchGuitarsAction(Number(params.id)));
-  }, [dispatch, params.id]);
+    store.dispatch(fetchGuitarsAction({id: Number(params.id), sortType: getSortType(searchParams.get('sort'))}));
+  }, [dispatch, params.id, searchParams]);
 
   const guitarsList: Guitar[] = useAppSelector(getGuitars);
 
@@ -155,26 +167,54 @@ function MainScreen(): JSX.Element {
               <h2 className="catalog-sort__title">Сортировать:</h2>
               <div className="catalog-sort__type">
                 <button
-                  className="catalog-sort__type-button"
+                  className={searchParams.get('sort') === SortTypes.Price ?
+                    'catalog-sort__type-button catalog-sort__type-button--active' :
+                    'catalog-sort__type-button'}
                   aria-label="по цене"
+                  onClick={() => {
+                    setSearchParams(searchParams.get('order') ?
+                      `?sort=price&order=${searchParams.get('order')}` :
+                      '?sort=price&order=asc');
+                  }}
                 >
                 по цене
                 </button>
                 <button
-                  className="catalog-sort__type-button"
+                  className={searchParams.get('sort') === SortTypes.Rating ?
+                    'catalog-sort__type-button catalog-sort__type-button--active' :
+                    'catalog-sort__type-button'}
                   aria-label="по популярности"
+                  onClick={() => {
+                    setSearchParams(searchParams.get('order') ?
+                      `?sort=rating&order=${searchParams.get('order')}` :
+                      '?sort=rating&order=asc');
+                  }}
                 >
                 по популярности
                 </button>
               </div>
               <div className="catalog-sort__order">
                 <button
-                  className="catalog-sort__order-button catalog-sort__order-button--up"
+                  className={searchParams.get('order') === OrderTypes.Asc ?
+                    'catalog-sort__order-button catalog-sort__order-button--up catalog-sort__order-button--active' :
+                    'catalog-sort__order-button catalog-sort__order-button--up'}
                   aria-label="По возрастанию"
+                  onClick={() => {
+                    setSearchParams(searchParams.get('sort') ?
+                      `?sort=${searchParams.get('sort')}&order=asc` :
+                      '?sort=price&order=asc');
+                  }}
                 />
                 <button
-                  className="catalog-sort__order-button catalog-sort__order-button--down"
+                  className={searchParams.get('order') === OrderTypes.Desc ?
+                    'catalog-sort__order-button catalog-sort__order-button--down catalog-sort__order-button--active' :
+                    'catalog-sort__order-button catalog-sort__order-button--down'}
                   aria-label="По убыванию"
+                  onClick={() => {
+                    setSearchParams(searchParams.get('sort') ?
+                      `?sort=${searchParams.get('sort')}&order=desc` :
+                      '?sort=price&order=desc');
+                  }}
                 />
               </div>
             </div>
