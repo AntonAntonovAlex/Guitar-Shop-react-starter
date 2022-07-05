@@ -10,6 +10,8 @@ const initialState: GuitarData = {
   reviews: [],
   countGuitars: 0,
   similarGuitars: [],
+  expensiveGuitar: [],
+  cheapestGuitar: [],
 };
 
 export const guitarData = createSlice({
@@ -32,7 +34,13 @@ export const guitarData = createSlice({
     loadSimilarGuitars: (state, action) => {
       state.similarGuitars = action.payload;
     },
+    loadPriceGuitar: (state, action) => {
+      if (action.payload) {
+        state.expensiveGuitar = action.payload.expensiveGuitar;
+        state.cheapestGuitar = action.payload.cheapestGuitar;
+      }
+    },
   },
 });
 
-export const {loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars} = guitarData.actions;
+export const {loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars, loadPriceGuitar} = guitarData.actions;

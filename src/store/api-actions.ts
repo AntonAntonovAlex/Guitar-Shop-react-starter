@@ -7,7 +7,7 @@ import { Review } from '../types/review';
 import { ReviewData } from '../types/review-data';
 import { AppDispatch, State } from '../types/state';
 import { UrlData } from '../types/url-data';
-import { loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars } from './guitar-data/guitar-data';
+import { loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars, loadPriceGuitar } from './guitar-data/guitar-data';
 
 export const fetchGuitarsAction = createAsyncThunk<void, UrlData, {
     dispatch: AppDispatch,
@@ -69,6 +69,23 @@ export const fetchSimilarGuitarsAction = createAsyncThunk<void, string, {
       try {
         const response = await api.get(`${APIRoute.Guitars}?name_like=${name}`);
         dispatch(loadSimilarGuitars(response.data));
+      } catch (error) {
+        errorHandle(error);
+      }
+    },
+  );
+
+export const fetchPriceGuitarAction = createAsyncThunk<void, undefined, {
+    dispatch: AppDispatch,
+    state: State,
+    extra: AxiosInstance
+  }>(
+    'DATA/loadPriceGuitar',
+    async (_arg, {dispatch, extra: api}) => {
+      try {
+        const {data: cheapestGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?_sort=price&_start=0&_limit=1`);
+        const {data: expensiveGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?_sort=price&_order=desc&_start=0&_limit=1`);
+        dispatch(loadPriceGuitar({expensiveGuitar, cheapestGuitar}));
       } catch (error) {
         errorHandle(error);
       }

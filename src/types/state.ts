@@ -9,6 +9,8 @@ export type GuitarData = {
     reviews: Review[],
     countGuitars: number,
     similarGuitars: Guitar[],
+    expensiveGuitar: Guitar[],
+    cheapestGuitar: Guitar[],
 };
 
 export type GuitarProcess = {
