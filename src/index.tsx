@@ -6,6 +6,9 @@ import browserHistory from './browser-history';
 import App from './components/app/app';
 import HistoryRouter from './components/history-route/history-route';
 import { store } from './store';
+import { fetchPriceGuitarAction } from './store/api-actions';
+
+store.dispatch(fetchPriceGuitarAction());
 
 ReactDOM.render(
   <React.StrictMode>

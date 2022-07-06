@@ -1,14 +1,16 @@
+import { ChangeEvent, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { getCheapestGuitar, getEexpensiveGuitar } from '../../store/guitar-data/selectors';
 
 function FormFilters(): JSX.Element {
 
-  /*useEffect(() => {
-    store.dispatch(fetchPriceGuitarAction());
-  }, []);*/
-
   const expensiveGuitar = useAppSelector(getEexpensiveGuitar);
   const cheapestGuitar = useAppSelector(getCheapestGuitar);
+
+  const [priceMin, setPriceMin] = useState('');
+  const [priceMax, setPriceMax] = useState('');
+
+  const [isDisableTwelveStrings, setIsDisableTwelveStrings] = useState(false);
 
   return (
     <form className="catalog-filter">
@@ -23,9 +25,19 @@ function FormFilters(): JSX.Element {
             <input
               type="number"
               min="0"
-              placeholder={String(cheapestGuitar[0]?.price)}
+              placeholder={(cheapestGuitar[0]?.price) ? String(cheapestGuitar[0]?.price) : '0'}
               id="priceMin"
               name="от"
+              value={priceMin}
+              onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                const value = target.value;
+                setPriceMin(value);
+              }}
+              onBlur={() => {
+                if (priceMin !== '') {
+                  setPriceMin((cheapestGuitar[0]?.price > +priceMin) ? String(cheapestGuitar[0]?.price) : priceMin);
+                }
+              }}
             />
           </div>
           <div className="form-input">
@@ -33,9 +45,19 @@ function FormFilters(): JSX.Element {
             <input
               type="number"
               min="0"
-              placeholder={String(expensiveGuitar[0]?.price)}
+              placeholder={(expensiveGuitar[0]?.price) ? String(expensiveGuitar[0]?.price) : '0'}
               id="priceMax"
               name="до"
+              value={priceMax}
+              onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                const value = target.value;
+                setPriceMax(value);
+              }}
+              onBlur={() => {
+                setPriceMax((expensiveGuitar[0]?.price < +priceMax || +priceMax < 0 || +priceMax < +priceMin) ?
+                  String(expensiveGuitar[0]?.price) :
+                  priceMax);
+              }}
             />
           </div>
         </div>
@@ -57,7 +79,6 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
-            defaultChecked
           />
           <label htmlFor="electric">Электрогитары</label>
         </div>
@@ -67,7 +88,14 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="ukulele"
             name="ukulele"
-            defaultChecked
+            //defaultChecked
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                setIsDisableTwelveStrings(true);
+              } else {
+                setIsDisableTwelveStrings(false);
+              }
+            }}
           />
           <label htmlFor="ukulele">Укулеле</label>
         </div>
@@ -111,7 +139,7 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="12-strings"
             name="12-strings"
-            disabled
+            disabled={isDisableTwelveStrings}
           />
           <label htmlFor="12-strings">12</label>
         </div>
@@ -119,6 +147,10 @@ function FormFilters(): JSX.Element {
       <button
         className="catalog-filter__reset-btn button button--black-border button--medium"
         type="reset"
+        onClick={() => {
+          setPriceMax('');
+          setPriceMin('');
+        }}
       >
               Очистить
       </button>

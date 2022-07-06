@@ -2,8 +2,6 @@ import { Navigate, Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { store } from '../../store';
-import { fetchPriceGuitarAction } from '../../store/api-actions';
 import { getLoadedDataStatus } from '../../store/guitar-data/selectors';
 import GuitarCharacteristics from '../guitar-characteristics/guitar-characteristics';
 import GuitarDescription from '../guitar-description/guitar-description';
@@ -14,7 +12,6 @@ import NotFoundScreen from '../not-found-screen/not-found-screen';
 
 function App(): JSX.Element {
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
-  store.dispatch(fetchPriceGuitarAction());
 
   if (!isDataLoaded) {
     return (
