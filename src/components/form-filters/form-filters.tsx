@@ -1,8 +1,11 @@
 import { ChangeEvent, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { getCheapestGuitar, getEexpensiveGuitar } from '../../store/guitar-data/selectors';
 
 function FormFilters(): JSX.Element {
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const expensiveGuitar = useAppSelector(getEexpensiveGuitar);
   const cheapestGuitar = useAppSelector(getCheapestGuitar);
@@ -10,7 +13,10 @@ function FormFilters(): JSX.Element {
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
 
-  const [isDisableTwelveStrings, setIsDisableTwelveStrings] = useState(false);
+  const [isCheckedUkulele, setIsCheckedUkulele] = useState(false);
+  const [isCheckedElectric, setIsCheckedElectric] = useState(false);
+  const [isCheckedAcoustic, setIsCheckedAcoustic] = useState(false);
+  const [isCheckedNothing, setIsCheckedNothing] = useState(true);
 
   return (
     <form className="catalog-filter">
@@ -37,6 +43,9 @@ function FormFilters(): JSX.Element {
                 if (priceMin !== '') {
                   setPriceMin((cheapestGuitar[0]?.price > +priceMin) ? String(cheapestGuitar[0]?.price) : priceMin);
                 }
+
+                searchParams.set('price_gte', `${priceMin}`);
+                setSearchParams(`${searchParams.toString()}&`);
               }}
             />
           </div>
@@ -57,6 +66,9 @@ function FormFilters(): JSX.Element {
                 setPriceMax((expensiveGuitar[0]?.price < +priceMax || +priceMax < 0 || +priceMax < +priceMin) ?
                   String(expensiveGuitar[0]?.price) :
                   priceMax);
+
+                searchParams.set('price_lte', `${priceMax}`);
+                setSearchParams(`${searchParams.toString()}&`);
               }}
             />
           </div>
@@ -70,6 +82,19 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="acoustic"
             name="acoustic"
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                setIsCheckedAcoustic(true);
+                setIsCheckedNothing(false);
+                searchParams.set('type', 'acoustic');
+                setSearchParams(`${searchParams.toString()}&`);
+              } else {
+                setIsCheckedAcoustic(false);
+                setIsCheckedNothing(!(isCheckedUkulele || isCheckedElectric));
+                searchParams.delete('type');
+                setSearchParams(`${searchParams.toString()}`);
+              }
+            }}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
         </div>
@@ -79,6 +104,15 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                setIsCheckedElectric(true);
+                setIsCheckedNothing(false);
+              } else {
+                setIsCheckedElectric(false);
+                setIsCheckedNothing(!(isCheckedUkulele || isCheckedAcoustic));
+              }
+            }}
           />
           <label htmlFor="electric">Электрогитары</label>
         </div>
@@ -91,9 +125,11 @@ function FormFilters(): JSX.Element {
             //defaultChecked
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
               if (target.checked) {
-                setIsDisableTwelveStrings(true);
+                setIsCheckedUkulele(true);
+                setIsCheckedNothing(false);
               } else {
-                setIsDisableTwelveStrings(false);
+                setIsCheckedUkulele(false);
+                setIsCheckedNothing(!(isCheckedElectric || isCheckedAcoustic));
               }
             }}
           />
@@ -110,7 +146,7 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="4-strings"
             name="4-strings"
-            defaultChecked
+            disabled={!(isCheckedUkulele || isCheckedElectric || isCheckedNothing)}
           />
           <label htmlFor="4-strings">4</label>
         </div>
@@ -120,7 +156,7 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="6-strings"
             name="6-strings"
-            defaultChecked
+            disabled={!(isCheckedAcoustic || isCheckedElectric || isCheckedNothing)}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -130,6 +166,7 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="7-strings"
             name="7-strings"
+            disabled={!(isCheckedAcoustic || isCheckedElectric || isCheckedNothing)}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -139,7 +176,7 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="12-strings"
             name="12-strings"
-            disabled={isDisableTwelveStrings}
+            disabled={!(isCheckedAcoustic || isCheckedNothing)}
           />
           <label htmlFor="12-strings">12</label>
         </div>
@@ -150,6 +187,10 @@ function FormFilters(): JSX.Element {
         onClick={() => {
           setPriceMax('');
           setPriceMin('');
+          setIsCheckedNothing(true);
+          setIsCheckedUkulele(false);
+          setIsCheckedElectric(false);
+          setIsCheckedAcoustic(false);
         }}
       >
               Очистить

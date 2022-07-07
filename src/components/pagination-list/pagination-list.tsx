@@ -9,8 +9,8 @@ function PaginationList(): JSX.Element {
   const activPage = useAppSelector(getActivPage);
 
   const [searchParams] = useSearchParams();
-  const searchParamsUrl = searchParams.get('sort') ?
-    `?sort=${searchParams.get('sort')}&order=${searchParams.get('order')}` : '';
+  const searchParamsUrl = searchParams.has('_sort') ?
+    `?${searchParams.toString()}` : '';
 
   function getPaginationLinks() {
     const paginationLinksItems = [];
