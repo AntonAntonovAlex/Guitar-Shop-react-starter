@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { FilterGuitarTypes, FilterStringsCount } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getCheapestGuitar, getEexpensiveGuitar } from '../../store/guitar-data/selectors';
 
@@ -12,11 +13,6 @@ function FormFilters(): JSX.Element {
 
   const [priceMin, setPriceMin] = useState('');
   const [priceMax, setPriceMax] = useState('');
-
-  const [isCheckedUkulele, setIsCheckedUkulele] = useState(false);
-  const [isCheckedElectric, setIsCheckedElectric] = useState(false);
-  const [isCheckedAcoustic, setIsCheckedAcoustic] = useState(false);
-  const [isCheckedNothing, setIsCheckedNothing] = useState(true);
 
   return (
     <form className="catalog-filter">
@@ -82,16 +78,24 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="acoustic"
             name="acoustic"
+            checked={searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
               if (target.checked) {
-                setIsCheckedAcoustic(true);
-                setIsCheckedNothing(false);
-                searchParams.set('type', 'acoustic');
+                if (searchParams.has('type')) {
+                  searchParams.append('type', FilterGuitarTypes.Acoustic);
+                } else {
+                  searchParams.set('type', FilterGuitarTypes.Acoustic);
+                }
                 setSearchParams(`${searchParams.toString()}&`);
               } else {
-                setIsCheckedAcoustic(false);
-                setIsCheckedNothing(!(isCheckedUkulele || isCheckedElectric));
-                searchParams.delete('type');
+                if (searchParams.getAll('type').length > 1) {
+                  const guitarTypes = searchParams.getAll('type');
+                  searchParams.delete('type');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterGuitarTypes.Acoustic)
+                    .map((typeGuitar) => searchParams.append('type', typeGuitar));
+                } else {
+                  searchParams.delete('type');
+                }
                 setSearchParams(`${searchParams.toString()}`);
               }
             }}
@@ -104,13 +108,25 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
+            checked={searchParams.getAll('type').includes(FilterGuitarTypes.Electric)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
               if (target.checked) {
-                setIsCheckedElectric(true);
-                setIsCheckedNothing(false);
+                if (searchParams.has('type')) {
+                  searchParams.append('type', FilterGuitarTypes.Electric);
+                } else {
+                  searchParams.set('type', FilterGuitarTypes.Electric);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
               } else {
-                setIsCheckedElectric(false);
-                setIsCheckedNothing(!(isCheckedUkulele || isCheckedAcoustic));
+                if (searchParams.getAll('type').length > 1) {
+                  const guitarTypes = searchParams.getAll('type');
+                  searchParams.delete('type');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterGuitarTypes.Electric)
+                    .map((typeGuitar) => searchParams.append('type', typeGuitar));
+                } else {
+                  searchParams.delete('type');
+                }
+                setSearchParams(`${searchParams.toString()}`);
               }
             }}
           />
@@ -122,14 +138,25 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="ukulele"
             name="ukulele"
-            //defaultChecked
+            checked={searchParams.getAll('type').includes(FilterGuitarTypes.Ukulele)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
               if (target.checked) {
-                setIsCheckedUkulele(true);
-                setIsCheckedNothing(false);
+                if (searchParams.has('type')) {
+                  searchParams.append('type', FilterGuitarTypes.Ukulele);
+                } else {
+                  searchParams.set('type', FilterGuitarTypes.Ukulele);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
               } else {
-                setIsCheckedUkulele(false);
-                setIsCheckedNothing(!(isCheckedElectric || isCheckedAcoustic));
+                if (searchParams.getAll('type').length > 1) {
+                  const guitarTypes = searchParams.getAll('type');
+                  searchParams.delete('type');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterGuitarTypes.Ukulele)
+                    .map((typeGuitar) => searchParams.append('type', typeGuitar));
+                } else {
+                  searchParams.delete('type');
+                }
+                setSearchParams(`${searchParams.toString()}`);
               }
             }}
           />
@@ -146,7 +173,28 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="4-strings"
             name="4-strings"
-            disabled={!(isCheckedUkulele || isCheckedElectric || isCheckedNothing)}
+            disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Ukulele) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
+            checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Four)}
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                if (searchParams.has('stringCount')) {
+                  searchParams.append('stringCount', FilterStringsCount.Four);
+                } else {
+                  searchParams.set('stringCount', FilterStringsCount.Four);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
+              } else {
+                if (searchParams.getAll('stringCount').length > 1) {
+                  const guitarTypes = searchParams.getAll('stringCount');
+                  searchParams.delete('stringCount');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterStringsCount.Four)
+                    .map((typeGuitar) => searchParams.append('stringCount', typeGuitar));
+                } else {
+                  searchParams.delete('stringCount');
+                }
+                setSearchParams(`${searchParams.toString()}`);
+              }
+            }}
           />
           <label htmlFor="4-strings">4</label>
         </div>
@@ -156,7 +204,28 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="6-strings"
             name="6-strings"
-            disabled={!(isCheckedAcoustic || isCheckedElectric || isCheckedNothing)}
+            disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
+            checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Six)}
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                if (searchParams.has('stringCount')) {
+                  searchParams.append('stringCount', FilterStringsCount.Six);
+                } else {
+                  searchParams.set('stringCount', FilterStringsCount.Six);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
+              } else {
+                if (searchParams.getAll('stringCount').length > 1) {
+                  const guitarTypes = searchParams.getAll('stringCount');
+                  searchParams.delete('stringCount');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterStringsCount.Six)
+                    .map((typeGuitar) => searchParams.append('stringCount', typeGuitar));
+                } else {
+                  searchParams.delete('stringCount');
+                }
+                setSearchParams(`${searchParams.toString()}`);
+              }
+            }}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -166,7 +235,28 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="7-strings"
             name="7-strings"
-            disabled={!(isCheckedAcoustic || isCheckedElectric || isCheckedNothing)}
+            disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
+            checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Seven)}
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                if (searchParams.has('stringCount')) {
+                  searchParams.append('stringCount', FilterStringsCount.Seven);
+                } else {
+                  searchParams.set('stringCount', FilterStringsCount.Seven);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
+              } else {
+                if (searchParams.getAll('stringCount').length > 1) {
+                  const guitarTypes = searchParams.getAll('stringCount');
+                  searchParams.delete('stringCount');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterStringsCount.Seven)
+                    .map((typeGuitar) => searchParams.append('stringCount', typeGuitar));
+                } else {
+                  searchParams.delete('stringCount');
+                }
+                setSearchParams(`${searchParams.toString()}`);
+              }
+            }}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -176,7 +266,28 @@ function FormFilters(): JSX.Element {
             type="checkbox"
             id="12-strings"
             name="12-strings"
-            disabled={!(isCheckedAcoustic || isCheckedNothing)}
+            disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || (searchParams.getAll('type').length === 0))}
+            checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Twelve)}
+            onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              if (target.checked) {
+                if (searchParams.has('stringCount')) {
+                  searchParams.append('stringCount', FilterStringsCount.Twelve);
+                } else {
+                  searchParams.set('stringCount', FilterStringsCount.Twelve);
+                }
+                setSearchParams(`${searchParams.toString()}&`);
+              } else {
+                if (searchParams.getAll('stringCount').length > 1) {
+                  const guitarTypes = searchParams.getAll('stringCount');
+                  searchParams.delete('stringCount');
+                  guitarTypes.filter((typeGuitar) => typeGuitar !== FilterStringsCount.Twelve)
+                    .map((typeGuitar) => searchParams.append('stringCount', typeGuitar));
+                } else {
+                  searchParams.delete('stringCount');
+                }
+                setSearchParams(`${searchParams.toString()}`);
+              }
+            }}
           />
           <label htmlFor="12-strings">12</label>
         </div>
@@ -187,10 +298,10 @@ function FormFilters(): JSX.Element {
         onClick={() => {
           setPriceMax('');
           setPriceMin('');
-          setIsCheckedNothing(true);
-          setIsCheckedUkulele(false);
-          setIsCheckedElectric(false);
-          setIsCheckedAcoustic(false);
+          searchParams.delete('type');
+          searchParams.delete('price_gte');
+          searchParams.delete('price_lte');
+          setSearchParams(`${searchParams.toString()}`);
         }}
       >
               Очистить

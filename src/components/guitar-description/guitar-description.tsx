@@ -5,7 +5,7 @@ function GuitarDescription(): JSX.Element {
   const selectedGuitar = useAppSelector(getGuitar);
 
   return (
-    <p className="tabs__product-description" >
+    <p className="tabs__product-description" data-testid="custom-element" >
       {selectedGuitar?.description}
     </p>
   );

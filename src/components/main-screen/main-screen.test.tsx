@@ -13,7 +13,12 @@ describe('Component: MainScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
     const store = mockStore({
-      DATA: {guitars: guitars},
+      DATA: {
+        guitars: guitars,
+        similarGuitars: guitars,
+        expensiveGuitar: guitars,
+        cheapestGuitar: guitars,
+      },
       GUITAR: {activPage: 1},
     });
 

@@ -9,7 +9,7 @@ function PaginationList(): JSX.Element {
   const activPage = useAppSelector(getActivPage);
 
   const [searchParams] = useSearchParams();
-  const searchParamsUrl = searchParams.has('_sort') ?
+  const searchParamsUrl = searchParams.has('_sort') || searchParams.has('type') || searchParams.has('stringCount') || searchParams.has('price_gte') || searchParams.has('price_lte') ?
     `?${searchParams.toString()}` : '';
 
   function getPaginationLinks() {

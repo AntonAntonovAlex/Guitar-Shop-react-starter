@@ -14,7 +14,9 @@ describe('Reducer: guitarData', () => {
         guitar: null,
         reviews: [],
         countGuitars: 0,
-        similarGuitars: []});
+        similarGuitars: [],
+        expensiveGuitar: [],
+        cheapestGuitar: []});
   });
 
   it('should update guitars by load guitars', () => {
