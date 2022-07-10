@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import { changeLoadingGuitarsStatus } from '../../store/guitar-data/guitar-data';
-import { getGuitars, getLoadingGuitarsStatus } from '../../store/guitar-data/selectors';
+import { getCountGuitars, getGuitars, getLoadingGuitarsStatus } from '../../store/guitar-data/selectors';
 import { changeActivPage } from '../../store/guitar-process/guitar-process';
 import { Guitar } from '../../types/guitar';
 import Footer from '../footer/footer';
@@ -20,6 +20,8 @@ function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const countGuitars = useAppSelector(getCountGuitars);
 
   useEffect(() => {
     dispatch(changeActivPage(Number(params.id)));
@@ -125,7 +127,7 @@ function MainScreen(): JSX.Element {
               {guitarsList.map((guitar) => (<GuitarCard guitar={guitar} key={guitar.id}/>))}
             </div>
             <div className="pagination page-content__pagination">
-              <PaginationList/>
+              {(countGuitars > 9) && <PaginationList/>}
             </div>
           </div>
         </div>
