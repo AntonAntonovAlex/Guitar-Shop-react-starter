@@ -11,3 +11,4 @@ export const getCountGuitars = (state: State): number => state[NameSpace.Data].c
 export const getSimilarGuitars = (state: State): Guitar[] => state[NameSpace.Data].similarGuitars;
 export const getEexpensiveGuitar = (state: State): Guitar[] => state[NameSpace.Data].expensiveGuitar;
 export const getCheapestGuitar = (state: State): Guitar[] => state[NameSpace.Data].cheapestGuitar;
+export const getLoadingGuitarsStatus = (state: State): boolean => state[NameSpace.Data].isLoadingGuitars;

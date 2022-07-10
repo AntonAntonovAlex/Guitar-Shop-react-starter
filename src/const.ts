@@ -11,6 +11,9 @@ export const STEP_COUNT_REVIEWS = 3;
 export const KEYCODE_TAB = 9;
 export const KEYCODE_ESC = 27;
 
+export const SPIN_HEIGHT = 80;
+export const SPIN_WIDTH = 80;
+
 export enum AppRoute {
   Main = '/catalog/page_:id',
   NotFoundScreen = '*',

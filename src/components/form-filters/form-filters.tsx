@@ -1,10 +1,13 @@
 import { ChangeEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FilterGuitarTypes, FilterStringsCount } from '../../const';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeLoadingGuitarsStatus } from '../../store/guitar-data/guitar-data';
 import { getCheapestGuitar, getEexpensiveGuitar } from '../../store/guitar-data/selectors';
 
 function FormFilters(): JSX.Element {
+
+  const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -36,6 +39,7 @@ function FormFilters(): JSX.Element {
                 setPriceMin(value);
               }}
               onBlur={() => {
+                dispatch(changeLoadingGuitarsStatus(true));
                 if (priceMin !== '') {
                   setPriceMin((cheapestGuitar[0]?.price > +priceMin) ? String(cheapestGuitar[0]?.price) : priceMin);
                 }
@@ -59,6 +63,7 @@ function FormFilters(): JSX.Element {
                 setPriceMax(value);
               }}
               onBlur={() => {
+                dispatch(changeLoadingGuitarsStatus(true));
                 setPriceMax((expensiveGuitar[0]?.price < +priceMax || +priceMax < 0 || +priceMax < +priceMin) ?
                   String(expensiveGuitar[0]?.price) :
                   priceMax);
@@ -80,6 +85,7 @@ function FormFilters(): JSX.Element {
             name="acoustic"
             checked={searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('type')) {
                   searchParams.append('type', FilterGuitarTypes.Acoustic);
@@ -110,6 +116,7 @@ function FormFilters(): JSX.Element {
             name="electric"
             checked={searchParams.getAll('type').includes(FilterGuitarTypes.Electric)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('type')) {
                   searchParams.append('type', FilterGuitarTypes.Electric);
@@ -140,6 +147,7 @@ function FormFilters(): JSX.Element {
             name="ukulele"
             checked={searchParams.getAll('type').includes(FilterGuitarTypes.Ukulele)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('type')) {
                   searchParams.append('type', FilterGuitarTypes.Ukulele);
@@ -176,6 +184,7 @@ function FormFilters(): JSX.Element {
             disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Ukulele) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
             checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Four)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('stringCount')) {
                   searchParams.append('stringCount', FilterStringsCount.Four);
@@ -207,6 +216,7 @@ function FormFilters(): JSX.Element {
             disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
             checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Six)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('stringCount')) {
                   searchParams.append('stringCount', FilterStringsCount.Six);
@@ -238,6 +248,7 @@ function FormFilters(): JSX.Element {
             disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || searchParams.getAll('type').includes(FilterGuitarTypes.Electric) || (searchParams.getAll('type').length === 0))}
             checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Seven)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('stringCount')) {
                   searchParams.append('stringCount', FilterStringsCount.Seven);
@@ -269,6 +280,7 @@ function FormFilters(): JSX.Element {
             disabled={!(searchParams.getAll('type').includes(FilterGuitarTypes.Acoustic) || (searchParams.getAll('type').length === 0))}
             checked={searchParams.getAll('stringCount').includes(FilterStringsCount.Twelve)}
             onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+              dispatch(changeLoadingGuitarsStatus(true));
               if (target.checked) {
                 if (searchParams.has('stringCount')) {
                   searchParams.append('stringCount', FilterStringsCount.Twelve);
@@ -301,6 +313,7 @@ function FormFilters(): JSX.Element {
           searchParams.delete('type');
           searchParams.delete('price_gte');
           searchParams.delete('price_lte');
+          searchParams.delete('stringCount');
           setSearchParams(`${searchParams.toString()}`);
         }}
       >

@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { redirectToRoute } from '../../store/action';
 import { fetchSimilarGuitarsAction } from '../../store/api-actions';
-import { loadSimilarGuitars } from '../../store/guitar-data/guitar-data';
+import { changeLoadingGuitarsStatus, loadSimilarGuitars } from '../../store/guitar-data/guitar-data';
 import { getSimilarGuitars } from '../../store/guitar-data/selectors';
 import { Guitar } from '../../types/guitar';
 
@@ -70,6 +70,7 @@ function Header(): JSX.Element {
               autoComplete="off"
               placeholder="что вы ищите?"
               onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                dispatch(changeLoadingGuitarsStatus(true));
                 const value = target.value;
                 setSearchUserText(value);
                 getListSimilarGuitars(value);

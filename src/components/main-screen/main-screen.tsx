@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { TailSpin } from 'react-loader-spinner';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { OrderTypes, SortTypes } from '../../const';
+import { OrderTypes, SortTypes, SPIN_HEIGHT, SPIN_WIDTH } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarsAction } from '../../store/api-actions';
-import { getGuitars } from '../../store/guitar-data/selectors';
+import { changeLoadingGuitarsStatus } from '../../store/guitar-data/guitar-data';
+import { getGuitars, getLoadingGuitarsStatus } from '../../store/guitar-data/selectors';
 import { changeActivPage } from '../../store/guitar-process/guitar-process';
 import { Guitar } from '../../types/guitar';
 import Footer from '../footer/footer';
@@ -25,11 +27,17 @@ function MainScreen(): JSX.Element {
   }, [dispatch, params.id, searchParams]);
 
   const guitarsList: Guitar[] = useAppSelector(getGuitars);
+  const isLoadingGuitars = useAppSelector(getLoadingGuitarsStatus);
 
   return (
     <div className="wrapper">
       <Header/>
       <main className="page-content">
+        {isLoadingGuitars ?
+          <div style={{position: 'absolute', left: '50%', top: '30%', transform: 'translate(-50%, -50%)'}}>
+            {<TailSpin color="#00BFFF" height={SPIN_HEIGHT} width={SPIN_WIDTH}/>}
+          </div> :
+          ''}
         <div className="container">
           <h1 className="page-content__title title title--bigger">
           Каталог гитар
@@ -55,6 +63,7 @@ function MainScreen(): JSX.Element {
                     'catalog-sort__type-button'}
                   aria-label="по цене"
                   onClick={() => {
+                    dispatch(changeLoadingGuitarsStatus(true));
                     searchParams.set('_sort', 'price');
                     if (!searchParams.has('_order')) {
                       searchParams.set('_order', 'asc');
@@ -70,6 +79,7 @@ function MainScreen(): JSX.Element {
                     'catalog-sort__type-button'}
                   aria-label="по популярности"
                   onClick={() => {
+                    dispatch(changeLoadingGuitarsStatus(true));
                     searchParams.set('_sort', 'rating');
                     if (!searchParams.has('_order')) {
                       searchParams.set('_order', 'asc');
@@ -87,6 +97,7 @@ function MainScreen(): JSX.Element {
                     'catalog-sort__order-button catalog-sort__order-button--up'}
                   aria-label="По возрастанию"
                   onClick={() => {
+                    dispatch(changeLoadingGuitarsStatus(true));
                     if (!searchParams.has('_sort')) {
                       searchParams.set('_sort', 'price');
                     }
@@ -100,6 +111,7 @@ function MainScreen(): JSX.Element {
                     'catalog-sort__order-button catalog-sort__order-button--down'}
                   aria-label="По убыванию"
                   onClick={() => {
+                    dispatch(changeLoadingGuitarsStatus(true));
                     if (!searchParams.has('_sort')) {
                       searchParams.set('_sort', 'price');
                     }

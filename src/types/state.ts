@@ -11,6 +11,7 @@ export type GuitarData = {
     similarGuitars: Guitar[],
     expensiveGuitar: Guitar[],
     cheapestGuitar: Guitar[],
+    isLoadingGuitars: boolean,
 };
 
 export type GuitarProcess = {

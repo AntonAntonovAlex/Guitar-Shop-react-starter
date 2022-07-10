@@ -1,5 +1,5 @@
 import { makeFakeGuitar, makeFakeReviews } from '../../mocks/mocks';
-import { guitarData, loadCountGuitars, loadGuitar, loadGuitars } from './guitar-data';
+import { changeLoadingGuitarsStatus, guitarData, loadCountGuitars, loadGuitar, loadGuitars } from './guitar-data';
 
 const guitars = [makeFakeGuitar(), makeFakeGuitar()];
 const guitar = makeFakeGuitar();
@@ -10,13 +10,14 @@ describe('Reducer: guitarData', () => {
     expect(guitarData.reducer(void 0, {type: 'UNKNOWN_ACTION'}))
       .toEqual({
         guitars: [],
-        isDataLoaded: true,
+        isDataLoaded: false,
         guitar: null,
         reviews: [],
         countGuitars: 0,
         similarGuitars: [],
         expensiveGuitar: [],
-        cheapestGuitar: []});
+        cheapestGuitar: [],
+        isLoadingGuitars: true});
   });
 
   it('should update guitars by load guitars', () => {
@@ -28,7 +29,8 @@ describe('Reducer: guitarData', () => {
       countGuitars: 0,
       similarGuitars: [],
       expensiveGuitar: [],
-      cheapestGuitar: []};
+      cheapestGuitar: [],
+      isLoadingGuitars: true};
     expect(guitarData.reducer(state, loadGuitars(guitars)))
       .toEqual({
         guitars: guitars,
@@ -38,7 +40,8 @@ describe('Reducer: guitarData', () => {
         countGuitars: 0,
         similarGuitars: [],
         expensiveGuitar: [],
-        cheapestGuitar: []});
+        cheapestGuitar: [],
+        isLoadingGuitars: false});
   });
 
   it('should update guitar&reviews by load guitar&reviews', () => {
@@ -50,7 +53,8 @@ describe('Reducer: guitarData', () => {
       countGuitars: 0,
       similarGuitars: [],
       expensiveGuitar: [],
-      cheapestGuitar: []};
+      cheapestGuitar: [],
+      isLoadingGuitars: true};
     expect(guitarData.reducer(state, loadGuitar({guitar, reviews})))
       .toEqual({
         guitars: [],
@@ -60,7 +64,8 @@ describe('Reducer: guitarData', () => {
         countGuitars: 0,
         similarGuitars: [],
         expensiveGuitar: [],
-        cheapestGuitar: []});
+        cheapestGuitar: [],
+        isLoadingGuitars: false});
   });
 
   it('should update countGuitars by load countGuitars', () => {
@@ -72,7 +77,8 @@ describe('Reducer: guitarData', () => {
       countGuitars: 0,
       similarGuitars: [],
       expensiveGuitar: [],
-      cheapestGuitar: []};
+      cheapestGuitar: [],
+      isLoadingGuitars: true};
     expect(guitarData.reducer(state, loadCountGuitars(10)))
       .toEqual({
         guitars: [],
@@ -82,7 +88,32 @@ describe('Reducer: guitarData', () => {
         countGuitars: 10,
         similarGuitars: [],
         expensiveGuitar: [],
-        cheapestGuitar: []});
+        cheapestGuitar: [],
+        isLoadingGuitars: true});
+  });
+
+  it('should update isLoadingGuitars by change LoadingGuitars Status', () => {
+    const state = {
+      guitars: [],
+      isDataLoaded: false,
+      guitar: null,
+      reviews: [],
+      countGuitars: 0,
+      similarGuitars: [],
+      expensiveGuitar: [],
+      cheapestGuitar: [],
+      isLoadingGuitars: true};
+    expect(guitarData.reducer(state, changeLoadingGuitarsStatus(false)))
+      .toEqual({
+        guitars: [],
+        isDataLoaded: false,
+        guitar: null,
+        reviews: [],
+        countGuitars: 0,
+        similarGuitars: [],
+        expensiveGuitar: [],
+        cheapestGuitar: [],
+        isLoadingGuitars: false});
   });
 
 });
