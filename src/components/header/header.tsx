@@ -100,7 +100,7 @@ function Header(): JSX.Element {
             className="form-search__reset"
             type="reset"
             form="form-search"
-            style={similarGuitarsList.length === 0 ? {} : {display: 'block'}}
+            style={similarGuitarsList.length !== 0 || searchUserText !== '' ? {display: 'block'} : {}}
             onClick={() => {
               setSearchUserText('');
               dispatch(loadSimilarGuitars([]));

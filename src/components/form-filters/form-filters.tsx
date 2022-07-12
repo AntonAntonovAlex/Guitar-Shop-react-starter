@@ -241,7 +241,11 @@ function FormFilters(): JSX.Element {
         onClick={() => {
           setPriceMax('');
           setPriceMin('');
-          dispatch(redirectToRoute('/catalog/page_1'));
+          searchParams.delete('stringCount');
+          searchParams.delete('type');
+          searchParams.delete('price_gte');
+          searchParams.delete('price_lte');
+          dispatch(redirectToRoute(`/catalog/page_1?${searchParams.toString()}`));
         }}
       >
               Очистить
