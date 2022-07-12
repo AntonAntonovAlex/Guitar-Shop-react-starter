@@ -17,6 +17,7 @@ describe('Component: FormFilters', () => {
         cheapestGuitar: guitars,
         expensiveGuitar: guitars,
       },
+      GUITAR: {activPage: 1},
     });
 
     render(
