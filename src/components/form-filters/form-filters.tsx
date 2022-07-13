@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { FilterGuitarTypes, FilterStringsCount } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
+import { fetchPriceGuitarAction } from '../../store/api-actions';
 import { changeLoadingGuitarsStatus } from '../../store/guitar-data/guitar-data';
 import { getCheapestGuitar, getEexpensiveGuitar } from '../../store/guitar-data/selectors';
 import { getActivPage } from '../../store/guitar-process/selectors';
@@ -27,6 +28,11 @@ function FormFilters(): JSX.Element {
     } else {
       setSearchParams(`${searchParams.toString()}&`);
     }
+    if (searchParams.has('_sort')) {
+      searchParams.delete('_sort');
+      searchParams.delete('_order');
+    }
+    dispatch(fetchPriceGuitarAction(`${searchParams.toString()}&`));
   }
 
   function setFilter(isChecked: boolean, filterType: string, filterValue: FilterGuitarTypes | FilterStringsCount) {
@@ -246,6 +252,7 @@ function FormFilters(): JSX.Element {
           searchParams.delete('price_gte');
           searchParams.delete('price_lte');
           dispatch(redirectToRoute(`/catalog/page_1?${searchParams.toString()}`));
+          dispatch(fetchPriceGuitarAction(''));
         }}
       >
               Очистить

@@ -75,16 +75,16 @@ export const fetchSimilarGuitarsAction = createAsyncThunk<void, string, {
     },
   );
 
-export const fetchPriceGuitarAction = createAsyncThunk<void, undefined, {
+export const fetchPriceGuitarAction = createAsyncThunk<void, string, {
     dispatch: AppDispatch,
     state: State,
     extra: AxiosInstance
   }>(
     'DATA/loadPriceGuitar',
-    async (_arg, {dispatch, extra: api}) => {
+    async (filterType, {dispatch, extra: api}) => {
       try {
-        const {data: cheapestGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?_sort=price&_start=0&_limit=1`);
-        const {data: expensiveGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?_sort=price&_order=desc&_start=0&_limit=1`);
+        const {data: cheapestGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?${filterType}_sort=price&_start=0&_limit=1`);
+        const {data: expensiveGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?${filterType}_sort=price&_order=desc&_start=0&_limit=1`);
         dispatch(loadPriceGuitar({expensiveGuitar, cheapestGuitar}));
       } catch (error) {
         errorHandle(error);

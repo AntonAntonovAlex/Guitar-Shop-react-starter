@@ -19,6 +19,18 @@ function Header(): JSX.Element {
     store.dispatch(fetchSimilarGuitarsAction(searchText));
   }
 
+  function handleMouseClick(evt: MouseEvent) {
+    const searchList = document.querySelector('.form-search');
+    if (searchList) {
+      const clickSearchList = evt.composedPath().includes(searchList);
+      if (!clickSearchList) {
+        setSearchUserText('');
+        dispatch(loadSimilarGuitars([]));
+        document.removeEventListener('click', handleMouseClick);
+      }
+    }
+  }
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
@@ -69,6 +81,9 @@ function Header(): JSX.Element {
               type="text"
               autoComplete="off"
               placeholder="что вы ищите?"
+              onClick={() => {
+                document.addEventListener('click', handleMouseClick);
+              }}
               onChange={({target}: ChangeEvent<HTMLInputElement>) => {
                 dispatch(changeLoadingGuitarsStatus(true));
                 const value = target.value;
@@ -86,10 +101,18 @@ function Header(): JSX.Element {
               <li className="form-search__select-item"
                 tabIndex={0}
                 key={similarGuitar.id}
+                onKeyDown={(evt)=> {
+                  if (evt.code === 'Enter') {
+                    dispatch(redirectToRoute(`${APIRoute.Guitars}/${similarGuitar?.id}/characteristics`));
+                    setSearchUserText('');
+                    dispatch(loadSimilarGuitars([]));
+                  }
+                }}
                 onClick={() => {
                   dispatch(redirectToRoute(`${APIRoute.Guitars}/${similarGuitar?.id}/characteristics`));
                   setSearchUserText('');
                   dispatch(loadSimilarGuitars([]));
+                  document.removeEventListener('click', handleMouseClick);
                 }}
               >
                 {similarGuitar.name}
@@ -104,6 +127,7 @@ function Header(): JSX.Element {
             onClick={() => {
               setSearchUserText('');
               dispatch(loadSimilarGuitars([]));
+              document.removeEventListener('click', handleMouseClick);
             }}
           >
             <svg
