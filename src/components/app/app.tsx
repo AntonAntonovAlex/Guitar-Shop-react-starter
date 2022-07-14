@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { getLoadedDataStatus } from '../../store/guitar-data/selectors';
+import CartScreen from '../cart-screen/cart-screen';
 import GuitarCharacteristics from '../guitar-characteristics/guitar-characteristics';
 import GuitarDescription from '../guitar-description/guitar-description';
 import GuitarScreen from '../guitar-screen/guitar-screen';
@@ -35,6 +36,10 @@ function App(): JSX.Element {
         <Route path="characteristics" element={<GuitarCharacteristics />} />
         <Route path="description" element={<GuitarDescription />} />
       </Route>
+      <Route
+        path={AppRoute.Cart}
+        element={<CartScreen/>}
+      />
     </Routes>
   );
 }
