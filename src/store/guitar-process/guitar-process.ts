@@ -5,6 +5,8 @@ import { GuitarProcess } from '../../types/state';
 const initialState: GuitarProcess = {
   activPage: 1,
   countReviews: STEP_COUNT_REVIEWS,
+  idCardForCart: 0,
+  guitarCart: new Map(),
 };
 
 export const guitarProcess = createSlice({
@@ -20,7 +22,10 @@ export const guitarProcess = createSlice({
     resetCountReviews: (state) => {
       state.countReviews = STEP_COUNT_REVIEWS;
     },
+    changeIdCardForCart: (state, action) => {
+      state.idCardForCart = action.payload;
+    },
   },
 });
 
-export const {changeActivPage, incrementCountReviews, resetCountReviews} = guitarProcess.actions;
+export const {changeActivPage, incrementCountReviews, resetCountReviews, changeIdCardForCart} = guitarProcess.actions;

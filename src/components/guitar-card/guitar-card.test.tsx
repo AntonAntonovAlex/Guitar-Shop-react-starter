@@ -12,7 +12,7 @@ describe('Component: Footer', () => {
 
     render(
       <HistoryRouter history={history}>
-        <GuitarCard guitar={fakeGuitar}/>
+        <GuitarCard guitar={fakeGuitar} onEventShowModalAddCartCallback={jest.fn()}/>
       </HistoryRouter>,
     );
 

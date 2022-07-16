@@ -17,6 +17,8 @@ export type GuitarData = {
 export type GuitarProcess = {
   activPage: number,
   countReviews: number,
+  idCardForCart: number,
+  guitarCart: Map<number, number>,
 };
 
 export type State = ReturnType<typeof store.getState>;

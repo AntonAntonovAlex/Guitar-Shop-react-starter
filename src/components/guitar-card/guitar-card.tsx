@@ -1,16 +1,21 @@
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { changeIdCardForCart } from '../../store/guitar-process/guitar-process';
 import { Guitar } from '../../types/guitar';
 import RatingStar from '../rating-star/rating-star';
 
 type GuitarCardProps = {
   guitar: Guitar;
+  onEventShowModalAddCartCallback: () => void;
 }
 
 const widthStar = 12;
 const heightStar = 11;
 
-function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
+function GuitarCard({guitar, onEventShowModalAddCartCallback}: GuitarCardProps): JSX.Element {
   const {price, name, previewImg, id, rating, comments} = guitar;
+
+  const dispatch = useAppDispatch();
 
   return (
     <div className="product-card">
@@ -41,6 +46,10 @@ function GuitarCard({guitar}: GuitarCardProps): JSX.Element {
         <a
           className="button button--red button--mini button--add-to-cart"
           href="#todo"
+          onClick={() => {
+            dispatch(changeIdCardForCart(id));
+            onEventShowModalAddCartCallback();
+          }}
         >
             Купить
         </a>

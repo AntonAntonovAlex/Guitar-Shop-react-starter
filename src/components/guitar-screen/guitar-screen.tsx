@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchGuitarAction } from '../../store/api-actions';
 import { loadGuitar } from '../../store/guitar-data/guitar-data';
 import { getGuitar, getReviews } from '../../store/guitar-data/selectors';
+import { changeIdCardForCart } from '../../store/guitar-process/guitar-process';
 import Footer from '../footer/footer';
 import Header from '../header/header';
+import ModalAddCart from '../modal-add-cart/modal-add-cart';
+import ModalAddSuccess from '../modal-add-success/modal-add-success';
 import ModalReview from '../modal-review/modal-review';
 import ModalSuccessReview from '../modal-success-review/modal-success-review';
 import RatingStar from '../rating-star/rating-star';
@@ -17,6 +20,8 @@ function GuitarScreen(): JSX.Element {
   const heightStar = 14;
 
   const params = useParams();
+
+  const dispatch = useAppDispatch();
 
   const selectedGuitar = useAppSelector(getGuitar);
   const guitarReviews = useAppSelector(getReviews);
@@ -32,27 +37,32 @@ function GuitarScreen(): JSX.Element {
   const [showModalSuccessReview, setShowModalSuccessReview] = useState(false);
   const [isCharacteristics, setIsCharacteristics] = useState(true);
 
+  const [showModalAddCart, setShowModalAddCart] = useState(false);
+  const [showModalAddSuccess, setShowModalAddSuccess] = useState(false);
+
   return (
-    <div className="wrapper" style={showModalReview || showModalSuccessReview ? { height: '100vh' } : {}}>
+    <div className="wrapper" style={showModalReview || showModalSuccessReview || showModalAddCart || showModalAddSuccess ? { height: '100vh' } : {}}>
       <Header/>
       <main className="page-content">
         {showModalReview && <ModalReview onEventShowModalReviewCallback={() => setShowModalReview(false)} onEventShowModalSuccessReview={() => setShowModalSuccessReview(true)}/>}
         {showModalSuccessReview && <ModalSuccessReview onEventsetShowModalSuccessReview={() => setShowModalSuccessReview(false)}/>}
+        {showModalAddCart && <ModalAddCart onEventShowModalAddCartCallback={() => setShowModalAddCart(false)} onEventShowModalAddSuccess={() => setShowModalAddSuccess(true)}/>}
+        {showModalAddSuccess && <ModalAddSuccess onEventShowModalAddSuccess={() => setShowModalAddSuccess(false)} isGuitarScreen/>}
         <div className="container">
           <h1 className="page-content__title title title--bigger">{selectedGuitar?.name}</h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
             <li className="breadcrumbs__item">
-              <a className="link" href="/">
+              <Link className="link" to={'/catalog/page_1'}>
               Главная
-              </a>
+              </Link>
             </li>
             <li className="breadcrumbs__item">
-              <a className="link" href="/">
+              <Link className="link" to={'/catalog/page_1'}>
               Каталог
-              </a>
+              </Link>
             </li>
             <li className="breadcrumbs__item">
-              <a className="link" href="todo">{selectedGuitar?.name}</a>
+              <Link className="link" to="todo">{selectedGuitar?.name}</Link>
             </li>
           </ul>
           <div className="product-container">
@@ -107,6 +117,10 @@ function GuitarScreen(): JSX.Element {
               <a
                 className="button button--red button--big product-container__button"
                 href="#todo"
+                onClick={() => {
+                  dispatch(changeIdCardForCart(selectedGuitar?.id));
+                  setShowModalAddCart(true);
+                }}
               >
               Добавить в корзину
               </a>

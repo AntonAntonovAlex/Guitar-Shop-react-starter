@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { OrderTypes, SortTypes, SPIN_HEIGHT, SPIN_WIDTH } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
@@ -13,6 +13,8 @@ import Footer from '../footer/footer';
 import FormFilters from '../form-filters/form-filters';
 import GuitarCard from '../guitar-card/guitar-card';
 import Header from '../header/header';
+import ModalAddCart from '../modal-add-cart/modal-add-cart';
+import ModalAddSuccess from '../modal-add-success/modal-add-success';
 import PaginationList from '../pagination-list/pagination-list';
 
 function MainScreen(): JSX.Element {
@@ -20,6 +22,9 @@ function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [showModalAddCart, setShowModalAddCart] = useState(false);
+  const [showModalAddSuccess, setShowModalAddSuccess] = useState(false);
 
   const countGuitars = useAppSelector(getCountGuitars);
 
@@ -32,7 +37,7 @@ function MainScreen(): JSX.Element {
   const isLoadingGuitars = useAppSelector(getLoadingGuitarsStatus);
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={showModalAddCart || showModalAddSuccess ? { height: '100vh' } : {}}>
       <Header/>
       <main className="page-content">
         {isLoadingGuitars ?
@@ -40,18 +45,20 @@ function MainScreen(): JSX.Element {
             {<TailSpin color="#00BFFF" height={SPIN_HEIGHT} width={SPIN_WIDTH}/>}
           </div> :
           ''}
+        {showModalAddCart && <ModalAddCart onEventShowModalAddCartCallback={() => setShowModalAddCart(false)} onEventShowModalAddSuccess={() => setShowModalAddSuccess(true)}/>}
+        {showModalAddSuccess && <ModalAddSuccess onEventShowModalAddSuccess={() => setShowModalAddSuccess(false)} isGuitarScreen={false}/>}
         <div className="container">
           <h1 className="page-content__title title title--bigger">
           Каталог гитар
           </h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
             <li className="breadcrumbs__item">
-              <a className="link" href="/">
+              <Link className="link" to={'/catalog/page_1'}>
               Главная
-              </a>
+              </Link>
             </li>
             <li className="breadcrumbs__item">
-              <a className="link" href="todo">Каталог</a>
+              <Link className="link" to="todo">Каталог</Link>
             </li>
           </ul>
           <div className="catalog">
@@ -124,7 +131,7 @@ function MainScreen(): JSX.Element {
               </div>
             </div>
             <div className="cards catalog__cards">
-              {guitarsList.map((guitar) => (<GuitarCard guitar={guitar} key={guitar.id}/>))}
+              {guitarsList.map((guitar) => (<GuitarCard guitar={guitar} key={guitar.id} onEventShowModalAddCartCallback={() => setShowModalAddCart(true)}/>))}
             </div>
             <div className="pagination page-content__pagination">
               {(countGuitars > 9) && <PaginationList/>}
