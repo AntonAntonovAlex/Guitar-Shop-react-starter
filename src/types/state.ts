@@ -1,5 +1,6 @@
 import { store } from '../store';
 import { Guitar } from './guitar';
+import { GuitarCart } from './guitar-cart';
 import { Review } from './review';
 
 export type GuitarData = {
@@ -17,8 +18,8 @@ export type GuitarData = {
 export type GuitarProcess = {
   activPage: number,
   countReviews: number,
-  idCardForCart: number,
-  guitarCart: Map<number, number>,
+  idGuitarForCart: number,
+  guitarsCart: GuitarCart,
 };
 
 export type State = ReturnType<typeof store.getState>;

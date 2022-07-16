@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
-import { changeIdCardForCart } from '../../store/guitar-process/guitar-process';
+import { AppRoute } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { redirectToRoute } from '../../store/action';
+import { changeIdGuitarForCart } from '../../store/guitar-process/guitar-process';
+import { getGuitarsCart } from '../../store/guitar-process/selectors';
 import { Guitar } from '../../types/guitar';
+import { GuitarCart } from '../../types/guitar-cart';
 import RatingStar from '../rating-star/rating-star';
 
 type GuitarCardProps = {
@@ -16,6 +20,9 @@ function GuitarCard({guitar, onEventShowModalAddCartCallback}: GuitarCardProps):
   const {price, name, previewImg, id, rating, comments} = guitar;
 
   const dispatch = useAppDispatch();
+
+  const idGuitarsCart: GuitarCart = useAppSelector(getGuitarsCart);
+  const isGuitarInCart = (id in idGuitarsCart);
 
   return (
     <div className="product-card">
@@ -43,16 +50,21 @@ function GuitarCard({guitar, onEventShowModalAddCartCallback}: GuitarCardProps):
         <Link className="button button--mini" to={`${'/guitars/'}${id}/characteristics`}>
             Подробнее
         </Link>
-        <a
-          className="button button--red button--mini button--add-to-cart"
-          href="#todo"
+        <button
+          className={isGuitarInCart
+            ? 'button button--red-border button--mini button--in-cart'
+            : 'button button--red button--mini button--add-to-cart'}
           onClick={() => {
-            dispatch(changeIdCardForCart(id));
+            if (isGuitarInCart) {
+              dispatch(redirectToRoute(AppRoute.Cart));
+              return;
+            }
+            dispatch(changeIdGuitarForCart(id));
             onEventShowModalAddCartCallback();
           }}
         >
-            Купить
-        </a>
+          {isGuitarInCart ? 'В Корзине' : 'Купить'}
+        </button>
       </div>
     </div>
   );

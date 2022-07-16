@@ -5,7 +5,7 @@ import { store } from '../../store';
 import { fetchGuitarAction } from '../../store/api-actions';
 import { loadGuitar } from '../../store/guitar-data/guitar-data';
 import { getGuitar, getReviews } from '../../store/guitar-data/selectors';
-import { changeIdCardForCart } from '../../store/guitar-process/guitar-process';
+import { changeIdGuitarForCart } from '../../store/guitar-process/guitar-process';
 import Footer from '../footer/footer';
 import Header from '../header/header';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
@@ -118,7 +118,7 @@ function GuitarScreen(): JSX.Element {
                 className="button button--red button--big product-container__button"
                 href="#todo"
                 onClick={() => {
-                  dispatch(changeIdCardForCart(selectedGuitar?.id));
+                  dispatch(changeIdGuitarForCart(selectedGuitar?.id));
                   setShowModalAddCart(true);
                 }}
               >
