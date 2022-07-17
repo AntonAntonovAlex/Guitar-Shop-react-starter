@@ -6,6 +6,9 @@ export const REQUEST_TIMEOUT = 5000;
 
 export const COUNT_GUITAR_CARD_IN_PAGE = 9;
 
+export const MAX_COUNT_GUITAR_IN_CART = 99;
+export const MIN_COUNT_GUITAR_IN_CART = 1;
+
 export const STEP_COUNT_REVIEWS = 3;
 
 export const KEYCODE_TAB = 9;

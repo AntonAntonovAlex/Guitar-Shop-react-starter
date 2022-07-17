@@ -21,8 +21,8 @@ function GuitarCard({guitar, onEventShowModalAddCartCallback}: GuitarCardProps):
 
   const dispatch = useAppDispatch();
 
-  const idGuitarsCart: GuitarCart = useAppSelector(getGuitarsCart);
-  const isGuitarInCart = (id in idGuitarsCart);
+  const guitarsInCart: GuitarCart = useAppSelector(getGuitarsCart);
+  const isGuitarInCart = (id in guitarsInCart);
 
   return (
     <div className="product-card">

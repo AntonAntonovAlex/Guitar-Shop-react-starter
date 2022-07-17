@@ -1,17 +1,28 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { getGuitarsCart } from '../../store/guitar-process/selectors';
 import CartItem from '../cart-item/cart-item';
 import Footer from '../footer/footer';
 import Header from '../header/header';
+import ModalDeleteCart from '../modal-delete-cart/modal-delete-cart';
 
 function CartScreen(): JSX.Element {
-  const guitarCartIds = Object.keys(useAppSelector(getGuitarsCart));
+  const guitarsCart = useAppSelector(getGuitarsCart);
+  const guitarCartIds = Object.keys(guitarsCart);
+  const initialValue = 0;
+  const priceGuitarsInCart = Object.keys(guitarsCart).reduce(
+    (accumulator, currentValue) => accumulator + guitarsCart[+currentValue].count * guitarsCart[+currentValue].price,
+    initialValue,
+  );
+
+  const [idGuitarRemoveFromCart, setIdGuitarRemoveFromCart] = useState('');
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" style={idGuitarRemoveFromCart ? { height: '100vh' } : {}}>
       <Header/>
       <main className="page-content">
+        {idGuitarRemoveFromCart && <ModalDeleteCart idGuitarRemoveFromCart={idGuitarRemoveFromCart} onEventShowModalDelete={() => setIdGuitarRemoveFromCart('')}/>}
         <div className="container">
           <h1 className="title title--bigger page-content__title">Корзина</h1>
           <ul className="breadcrumbs page-content__breadcrumbs page-content__breadcrumbs--on-cart-page">
@@ -30,7 +41,7 @@ function CartScreen(): JSX.Element {
             </li>
           </ul>
           <div className="cart">
-            {guitarCartIds.map((guitarId) => (<CartItem guitarId={+guitarId} key={guitarId}/>))}
+            {guitarCartIds.map((guitarId) => (<CartItem guitarId={+guitarId} key={guitarId} onEventShowModalDelete={() => setIdGuitarRemoveFromCart(guitarId)}/>))}
             <div className="cart__footer">
               <div className="cart__coupon coupon">
                 <h2 className="title title--little coupon__title">
@@ -65,7 +76,7 @@ function CartScreen(): JSX.Element {
               <div className="cart__total-info">
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Всего:</span>
-                  <span className="cart__total-value">52 000 ₽</span>
+                  <span className="cart__total-value">{priceGuitarsInCart?.toLocaleString('ru')} ₽</span>
                 </p>
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Скидка:</span>

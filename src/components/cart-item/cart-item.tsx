@@ -1,13 +1,18 @@
-import { GuitarType } from '../../const';
-import { useAppSelector } from '../../hooks';
+import { ChangeEvent } from 'react';
+import { GuitarType, MAX_COUNT_GUITAR_IN_CART, MIN_COUNT_GUITAR_IN_CART } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changeCountGuitarInCart } from '../../store/guitar-process/guitar-process';
 import { getGuitarsCart } from '../../store/guitar-process/selectors';
 
 type CartItemProps = {
     guitarId: number;
+    onEventShowModalDelete: () => void;
   }
 
-function CartItem({guitarId}: CartItemProps): JSX.Element {
+function CartItem({guitarId, onEventShowModalDelete}: CartItemProps): JSX.Element {
   const guitar = useAppSelector(getGuitarsCart)[guitarId];
+
+  const dispatch = useAppDispatch();
 
   return (
     <div className="cart-item">
@@ -15,6 +20,7 @@ function CartItem({guitarId}: CartItemProps): JSX.Element {
         className="cart-item__close-button button-cross"
         type="button"
         aria-label="Удалить"
+        onClick={onEventShowModalDelete}
       >
         <span className="button-cross__icon" />
         <span className="cart-item__close-button-interactive-area" />
@@ -38,6 +44,13 @@ function CartItem({guitarId}: CartItemProps): JSX.Element {
         <button
           className="quantity__button"
           aria-label="Уменьшить количество"
+          onClick={() =>{
+            if (+guitar.count === MIN_COUNT_GUITAR_IN_CART) {
+              onEventShowModalDelete();
+              return;
+            }
+            dispatch(changeCountGuitarInCart({id: guitarId, count: (guitar.count - 1)}));
+          }}
         >
           <svg width={8} height={8} aria-hidden="true">
             <use xlinkHref="#icon-minus" />
@@ -47,20 +60,34 @@ function CartItem({guitarId}: CartItemProps): JSX.Element {
           className="quantity__input"
           type="number"
           placeholder='1'
-          id="2-count"
-          name="2-count"
+          id={`${guitarId}-count`}
+          name={`${guitarId}-count`}
           max={99}
+          value={guitar.count.toString()}
+          onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+            let value = +target.value;
+            if (+target.value > MAX_COUNT_GUITAR_IN_CART) {
+              value = MAX_COUNT_GUITAR_IN_CART;
+            } else if (+target.value < MIN_COUNT_GUITAR_IN_CART) {
+              value = MIN_COUNT_GUITAR_IN_CART;
+            }
+            dispatch(changeCountGuitarInCart({id: guitarId, count: value}));
+          }}
         />
         <button
           className="quantity__button"
           aria-label="Увеличить количество"
+          onClick={() =>{
+            if (+guitar.count === MAX_COUNT_GUITAR_IN_CART) {return;}
+            dispatch(changeCountGuitarInCart({id: guitarId, count: (+guitar.count + 1)}));
+          }}
         >
           <svg width={8} height={8} aria-hidden="true">
             <use xlinkHref="#icon-plus" />
           </svg>
         </button>
       </div>
-      <div className="cart-item__price-total">{guitar.price.toLocaleString('ru')} ₽</div>
+      <div className="cart-item__price-total">{(guitar.price * guitar.count).toLocaleString('ru')} ₽</div>
     </div>
   );
 }

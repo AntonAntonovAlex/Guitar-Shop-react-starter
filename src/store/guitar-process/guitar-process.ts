@@ -25,7 +25,7 @@ export const guitarProcess = createSlice({
     changeIdGuitarForCart: (state, action) => {
       state.idGuitarForCart = action.payload;
     },
-    addGuitarsCart: (state, action) => {
+    addGuitarInCart: (state, action) => {
       if (action.payload.id in state.guitarsCart) {
         state.guitarsCart[action.payload.id].count += 1;
         return;
@@ -40,7 +40,13 @@ export const guitarProcess = createSlice({
         count: 1,
       };
     },
+    removeGuitarFromCart: (state, action) => {
+      delete state.guitarsCart[action.payload];
+    },
+    changeCountGuitarInCart: (state, action) => {
+      state.guitarsCart[action.payload.id].count = action.payload.count;
+    },
   },
 });
 
-export const {changeActivPage, incrementCountReviews, resetCountReviews, changeIdGuitarForCart, addGuitarsCart} = guitarProcess.actions;
+export const {changeActivPage, incrementCountReviews, resetCountReviews, changeIdGuitarForCart, addGuitarInCart, removeGuitarFromCart, changeCountGuitarInCart} = guitarProcess.actions;

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { GuitarType, KEYCODE_ESC, KEYCODE_TAB } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getGuitars } from '../../store/guitar-data/selectors';
-import { addGuitarsCart } from '../../store/guitar-process/guitar-process';
+import { addGuitarInCart } from '../../store/guitar-process/guitar-process';
 import { getIdGuitarForCart } from '../../store/guitar-process/selectors';
 import { Guitar } from '../../types/guitar';
 
@@ -87,7 +87,7 @@ function ModalAddCart({onEventShowModalAddCartCallback, onEventShowModalAddSucce
               onClick={() => {
                 onEventShowModalAddCartCallback();
                 onEventShowModalAddSuccess();
-                dispatch(addGuitarsCart(guitarCardForCart));
+                dispatch(addGuitarInCart(guitarCardForCart));
               }}
             >
           Добавить в корзину

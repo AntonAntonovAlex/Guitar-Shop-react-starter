@@ -14,7 +14,7 @@ describe('Component: CartItem', () => {
     const history = createMemoryHistory();
 
     const store = mockStore({
-      GUITAR: {guitarsCart: {1: guitar}},
+      GUITAR: {guitarsCart: {1: {...guitar, count: 1}}},
     });
 
     render(
@@ -22,6 +22,7 @@ describe('Component: CartItem', () => {
         <HistoryRouter history={history}>
           <CartItem
             guitarId={1}
+            onEventShowModalDelete={jest.fn()}
           />
         </HistoryRouter>
       </Provider>,

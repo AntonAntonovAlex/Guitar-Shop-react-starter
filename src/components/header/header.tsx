@@ -17,7 +17,7 @@ function Header(): JSX.Element {
 
   const guitarsCart = useAppSelector(getGuitarsCart);
   const initialValue = 0;
-  const SumGuitarsInCart = Object.keys(guitarsCart).reduce(
+  const countGuitarsInCart = Object.keys(guitarsCart).reduce(
     (accumulator, currentValue) => accumulator + guitarsCart[+currentValue].count,
     initialValue,
   );
@@ -160,11 +160,11 @@ function Header(): JSX.Element {
             <use xlinkHref="#icon-basket" />
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className={SumGuitarsInCart === 0
+          <span className={countGuitarsInCart === 0
             ? 'header__cart-count hidden'
             : 'header__cart-count'}
           >
-            {SumGuitarsInCart}
+            {countGuitarsInCart}
           </span>
         </Link>
       </div>
