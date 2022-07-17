@@ -9,6 +9,7 @@ import { makeFakeGuitar } from '../../mocks/mocks';
 
 const mockStore = configureMockStore();
 const guitars = [makeFakeGuitar(), makeFakeGuitar()];
+const guitar = makeFakeGuitar();
 
 const store = mockStore({
   DATA: {
@@ -18,7 +19,7 @@ const store = mockStore({
     expensiveGuitar: guitars,
     cheapestGuitar: guitars,
   },
-  GUITAR: {activPage: 1},
+  GUITAR: {activPage: 1, guitarsCart: {1: guitar}},
 });
 
 const history = createMemoryHistory();

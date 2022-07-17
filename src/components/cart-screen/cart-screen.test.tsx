@@ -3,35 +3,33 @@ import {createMemoryHistory} from 'history';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
 import HistoryRouter from '../history-route/history-route';
-import MainScreen from './main-screen';
 import { makeFakeGuitar } from '../../mocks/mocks';
+import CartScreen from './cart-screen';
 
 const mockStore = configureMockStore();
-const guitars = [makeFakeGuitar(), makeFakeGuitar()];
 const guitar = makeFakeGuitar();
+const guitars = [makeFakeGuitar(), makeFakeGuitar()];
 
-describe('Component: MainScreen', () => {
+describe('Component: CartScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+
     const store = mockStore({
+      GUITAR: {guitarsCart: {1: guitar}},
       DATA: {
-        guitars: guitars,
         similarGuitars: guitars,
-        expensiveGuitar: guitars,
-        cheapestGuitar: guitars,
       },
-      GUITAR: {activPage: 1, guitarsCart: {1: guitar}},
     });
 
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <MainScreen />
+          <CartScreen/>
         </HistoryRouter>
       </Provider>,
     );
 
-    expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
+    expect(screen.getByText(/Промокод на скидку/i)).toBeInTheDocument();
+    expect(screen.getByText(/Оформить заказ/i)).toBeInTheDocument();
   });
 });
