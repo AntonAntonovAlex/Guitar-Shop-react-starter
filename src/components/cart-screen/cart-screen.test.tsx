@@ -15,7 +15,7 @@ describe('Component: CartScreen', () => {
     const history = createMemoryHistory();
 
     const store = mockStore({
-      GUITAR: {guitarsCart: {1: guitar}},
+      GUITAR: {guitarsCart: {1: {...guitar, count: 1}}},
       DATA: {
         similarGuitars: guitars,
       },

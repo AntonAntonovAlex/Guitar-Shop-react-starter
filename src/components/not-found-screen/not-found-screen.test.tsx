@@ -8,12 +8,14 @@ import NotFoundScreen from './not-found-screen';
 
 const mockStore = configureMockStore();
 const guitars = [makeFakeGuitar(), makeFakeGuitar()];
+const guitar = makeFakeGuitar();
 
 describe('Component: NotFoundScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
     const store = mockStore({
       DATA: {similarGuitars: guitars},
+      GUITAR: {guitarsCart: {1: {...guitar, count: 1}}},
     });
 
 

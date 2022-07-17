@@ -8,12 +8,14 @@ import Header from './header';
 
 const mockStore = configureMockStore();
 const guitars = [makeFakeGuitar(), makeFakeGuitar()];
+const guitar = makeFakeGuitar();
 
 describe('Component: Header', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
     const store = mockStore({
       DATA: {similarGuitars: guitars},
+      GUITAR: {guitarsCart: {1: {...guitar, count: 1}}},
     });
 
     render(

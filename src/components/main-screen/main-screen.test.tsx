@@ -20,7 +20,7 @@ describe('Component: MainScreen', () => {
         expensiveGuitar: guitars,
         cheapestGuitar: guitars,
       },
-      GUITAR: {activPage: 1, guitarsCart: {1: guitar}},
+      GUITAR: {activPage: 1, guitarsCart: {1: {...guitar, count: 1}}},
     });
 
     render(

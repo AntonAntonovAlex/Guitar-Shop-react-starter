@@ -1,17 +1,26 @@
 import { ChangeEvent, useState } from 'react';
-import { APIRoute } from '../../const';
+import { Link } from 'react-router-dom';
+import { APIRoute, AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { redirectToRoute } from '../../store/action';
 import { fetchSimilarGuitarsAction } from '../../store/api-actions';
 import { changeLoadingGuitarsStatus, loadSimilarGuitars } from '../../store/guitar-data/guitar-data';
 import { getSimilarGuitars } from '../../store/guitar-data/selectors';
+import { getGuitarsCart } from '../../store/guitar-process/selectors';
 import { Guitar } from '../../types/guitar';
 
 function Header(): JSX.Element {
 
   const [searchUserText, setSearchUserText] = useState('');
   const similarGuitarsList: Guitar[] = useAppSelector(getSimilarGuitars);
+
+  const guitarsCart = useAppSelector(getGuitarsCart);
+  const initialValue = 0;
+  const SumGuitarsInCart = Object.keys(guitarsCart).reduce(
+    (accumulator, currentValue) => accumulator + guitarsCart[+currentValue].count,
+    initialValue,
+  );
 
   const dispatch = useAppDispatch();
 
@@ -141,7 +150,7 @@ function Header(): JSX.Element {
             <span className="visually-hidden">Сбросить поиск</span>
           </button>
         </div>
-        <a className="header__cart-link" href="#todo" aria-label="Корзина">
+        <Link className="header__cart-link" to={AppRoute.Cart} aria-label="Корзина">
           <svg
             className="header__cart-icon"
             width={14}
@@ -151,8 +160,13 @@ function Header(): JSX.Element {
             <use xlinkHref="#icon-basket" />
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">2</span>
-        </a>
+          <span className={SumGuitarsInCart === 0
+            ? 'header__cart-count hidden'
+            : 'header__cart-count'}
+          >
+            {SumGuitarsInCart}
+          </span>
+        </Link>
       </div>
     </header>
   );
