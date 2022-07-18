@@ -98,7 +98,7 @@ export const sendCouponAction = createAsyncThunk<void, CouponData, {
     state: State,
     extra: AxiosInstance
   }>(
-    'DATA/сoupon',
+    'GUITAR/loadCartBonus',
     async ({coupon}, {dispatch, extra: api}) => {
       try {
         const response = await api.post<CouponData>(APIRoute.Coupons, {coupon});

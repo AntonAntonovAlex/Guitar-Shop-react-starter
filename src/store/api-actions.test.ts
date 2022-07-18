@@ -6,8 +6,9 @@ import { State } from '../types/state';
 import {Action} from 'redux';
 import { makeFakeGuitar, makeFakeReviewData } from '../mocks/mocks';
 import { APIRoute } from '../const';
-import { fetchGuitarAction, fetchGuitarsAction, sendReviewAction } from './api-actions';
+import { fetchGuitarAction, fetchGuitarsAction, sendCouponAction, sendReviewAction } from './api-actions';
 import { loadGuitar, loadGuitars } from './guitar-data/guitar-data';
+import { loadCartBonus } from './guitar-process/guitar-process';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -64,6 +65,22 @@ describe('Async actions', () => {
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions[0]).toContain('DATA/review');
+
+  });
+
+  it('should dispatch when POST /coupon', async () => {
+
+    mockAPI
+      .onPost(APIRoute.Coupons)
+      .reply(200, 15);
+
+    const store = mockStore();
+
+    await store.dispatch(sendCouponAction({coupon: 'string'}));
+
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions[0]).toContain(loadCartBonus.toString());
 
   });
 
