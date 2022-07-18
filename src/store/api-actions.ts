@@ -7,7 +7,9 @@ import { Review } from '../types/review';
 import { ReviewData } from '../types/review-data';
 import { AppDispatch, State } from '../types/state';
 import { UrlData } from '../types/url-data';
+import { CouponData } from '../types/сoupon-data';
 import { loadGuitars, loadGuitar, loadCountGuitars, loadSimilarGuitars, loadPriceGuitar } from './guitar-data/guitar-data';
+import { loadCartBonus } from './guitar-process/guitar-process';
 
 export const fetchGuitarsAction = createAsyncThunk<void, UrlData, {
     dispatch: AppDispatch,
@@ -87,6 +89,22 @@ export const fetchPriceGuitarAction = createAsyncThunk<void, string, {
         const {data: expensiveGuitar} = await api.get<Guitar>(`${APIRoute.Guitars}/?${filterType}_sort=price&_order=desc&_start=0&_limit=1`);
         dispatch(loadPriceGuitar({expensiveGuitar, cheapestGuitar}));
       } catch (error) {
+        errorHandle(error);
+      }
+    },
+  );
+
+export const sendCouponAction = createAsyncThunk<void, CouponData, {
+    state: State,
+    extra: AxiosInstance
+  }>(
+    'DATA/сoupon',
+    async ({coupon}, {dispatch, extra: api}) => {
+      try {
+        const response = await api.post<CouponData>(APIRoute.Coupons, {coupon});
+        dispatch(loadCartBonus(response.data));
+      } catch (error) {
+        dispatch(loadCartBonus(0));
         errorHandle(error);
       }
     },

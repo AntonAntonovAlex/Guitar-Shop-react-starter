@@ -6,3 +6,4 @@ export const getActivPage = (state: State): number => state[NameSpace.Guitar].ac
 export const getCountReviews = (state: State): number => state[NameSpace.Guitar].countReviews;
 export const getIdGuitarForCart = (state: State): number => state[NameSpace.Guitar].idGuitarForCart;
 export const getGuitarsCart = (state: State): GuitarCart => state[NameSpace.Guitar].guitarsCart;
+export const getCartBonus = (state: State): number => state[NameSpace.Guitar].cartBonus;

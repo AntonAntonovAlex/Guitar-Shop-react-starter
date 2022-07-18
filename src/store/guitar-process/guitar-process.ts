@@ -7,6 +7,7 @@ const initialState: GuitarProcess = {
   countReviews: STEP_COUNT_REVIEWS,
   idGuitarForCart: 0,
   guitarsCart: {},
+  cartBonus: 0,
 };
 
 export const guitarProcess = createSlice({
@@ -46,7 +47,10 @@ export const guitarProcess = createSlice({
     changeCountGuitarInCart: (state, action) => {
       state.guitarsCart[action.payload.id].count = action.payload.count;
     },
+    loadCartBonus: (state, action) => {
+      state.cartBonus = action.payload;
+    },
   },
 });
 
-export const {changeActivPage, incrementCountReviews, resetCountReviews, changeIdGuitarForCart, addGuitarInCart, removeGuitarFromCart, changeCountGuitarInCart} = guitarProcess.actions;
+export const {changeActivPage, incrementCountReviews, resetCountReviews, changeIdGuitarForCart, addGuitarInCart, removeGuitarFromCart, changeCountGuitarInCart, loadCartBonus} = guitarProcess.actions;

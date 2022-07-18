@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
-import { getGuitarsCart } from '../../store/guitar-process/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { sendCouponAction } from '../../store/api-actions';
+import { getCartBonus, getGuitarsCart } from '../../store/guitar-process/selectors';
 import CartItem from '../cart-item/cart-item';
 import Footer from '../footer/footer';
 import Header from '../header/header';
 import ModalDeleteCart from '../modal-delete-cart/modal-delete-cart';
 
 function CartScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const cartBonusPercent = useAppSelector(getCartBonus);
   const guitarsCart = useAppSelector(getGuitarsCart);
   const guitarCartIds = Object.keys(guitarsCart);
   const initialValue = 0;
@@ -16,7 +20,26 @@ function CartScreen(): JSX.Element {
     initialValue,
   );
 
+  const cartBonusValue = priceGuitarsInCart / 100 * cartBonusPercent;
+
   const [idGuitarRemoveFromCart, setIdGuitarRemoveFromCart] = useState('');
+  const [couponValue, setCouponValue] = useState('');
+  const [showCouponInputMessage, setShowCouponInputMessage] = useState(false);
+
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    dispatch(sendCouponAction({coupon: couponValue}));
+    setShowCouponInputMessage(true);
+  };
+
+  function getClassNameCouponInput () {
+    if (!showCouponInputMessage || guitarCartIds.length === 0) {
+      return 'hidden';
+    }
+    return cartBonusValue > 0
+      ? 'form-input__message form-input__message--success'
+      : 'form-input__message form-input__message--error';
+  }
 
   return (
     <div className="wrapper" style={idGuitarRemoveFromCart ? { height: '100vh' } : {}}>
@@ -55,6 +78,7 @@ function CartScreen(): JSX.Element {
                   id="coupon-form"
                   method="post"
                   action="/"
+                  onSubmit={handleFormSubmit}
                 >
                   <div className="form-input coupon__input">
                     <label className="visually-hidden">Промокод</label>
@@ -63,9 +87,16 @@ function CartScreen(): JSX.Element {
                       placeholder="Введите промокод"
                       id="coupon"
                       name="coupon"
+                      autoComplete="off"
+                      pattern='^[^\s]*$'
+                      onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+                        const value = target.value;
+                        setCouponValue(value);
+                      }}
+                      value={couponValue}
                     />
-                    <p className="form-input__message form-input__message--success">
-                  Промокод принят
+                    <p className={getClassNameCouponInput()}>
+                      {cartBonusValue > 0 ? 'Промокод принят' : 'неверный промокод'}
                     </p>
                   </div>
                   <button className="button button--big coupon__button">
@@ -80,14 +111,17 @@ function CartScreen(): JSX.Element {
                 </p>
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Скидка:</span>
-                  <span className="cart__total-value cart__total-value--bonus">
-                - 3000 ₽
+                  <span className={cartBonusValue > 0
+                    ? 'cart__total-value cart__total-value--bonus'
+                    : 'cart__total-value'}
+                  >
+                    {cartBonusValue > 0 ? '-' : ''} {(cartBonusValue)?.toLocaleString('ru')} ₽
                   </span>
                 </p>
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">К оплате:</span>
                   <span className="cart__total-value cart__total-value--payment">
-                49 000 ₽
+                    {(priceGuitarsInCart - (cartBonusValue))?.toLocaleString('ru')} ₽
                   </span>
                 </p>
                 <button className="button button--red button--big cart__order-button">

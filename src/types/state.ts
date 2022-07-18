@@ -20,6 +20,7 @@ export type GuitarProcess = {
   countReviews: number,
   idGuitarForCart: number,
   guitarsCart: GuitarCart,
+  cartBonus: number,
 };
 
 export type State = ReturnType<typeof store.getState>;
