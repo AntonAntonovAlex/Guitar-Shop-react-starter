@@ -18,10 +18,9 @@ function ModalAddCart({onEventShowModalAddCartCallback, onEventShowModalAddSucce
 
   const dispatch = useAppDispatch();
 
-  const lastFocusableEl = document.querySelector('#button-close');
-  const firstFocusableEl  = document.querySelector('#button-add');
-
   const keyDownFunction = useCallback((evt) => {
+    const lastFocusableEl = document.querySelector('#button-close');
+    const firstFocusableEl  = document.querySelector('#button-add');
     if (evt.keyCode === KEYCODE_ESC) {
       onEventShowModalAddCartCallback();
     }
@@ -38,7 +37,7 @@ function ModalAddCart({onEventShowModalAddCartCallback, onEventShowModalAddSucce
         }
       }
     }
-  }, [firstFocusableEl, lastFocusableEl, onEventShowModalAddCartCallback]);
+  }, [onEventShowModalAddCartCallback]);
 
   useEffect(() => {
     document.addEventListener('keydown', keyDownFunction);
