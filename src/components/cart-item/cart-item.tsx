@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react';
-import { GuitarType, MAX_COUNT_GUITAR_IN_CART, MIN_COUNT_GUITAR_IN_CART } from '../../const';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { GuitarType, KEYCODE_ENTER, MAX_COUNT_GUITAR_IN_CART, MIN_COUNT_GUITAR_IN_CART } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { changeCountGuitarInCart } from '../../store/guitar-process/guitar-process';
 import { getGuitarsCart } from '../../store/guitar-process/selectors';
@@ -12,7 +12,25 @@ type CartItemProps = {
 function CartItem({guitarId, onEventShowModalDelete}: CartItemProps): JSX.Element {
   const guitar = useAppSelector(getGuitarsCart)[guitarId];
 
+  const [countGuitar, setCountGuitar] = useState('');
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setCountGuitar(guitar.count.toString());
+  }, [guitar.count]);
+
+  const keyDownFunction = useCallback((evt) => {
+    if (evt.keyCode === KEYCODE_ENTER) {
+      let value = +evt.target.value;
+      if (+evt.target.value > MAX_COUNT_GUITAR_IN_CART) {
+        value = MAX_COUNT_GUITAR_IN_CART;
+      } else if (+evt.target.value < MIN_COUNT_GUITAR_IN_CART || evt.target.value === '') {
+        value = MIN_COUNT_GUITAR_IN_CART;
+        setCountGuitar(value.toString());
+      }
+      dispatch(changeCountGuitarInCart({id: guitarId, count: value}));
+    }
+  }, [dispatch, guitarId]);
 
   return (
     <div className="cart-item">
@@ -63,16 +81,22 @@ function CartItem({guitarId, onEventShowModalDelete}: CartItemProps): JSX.Elemen
           id={`${guitarId}-count`}
           name={`${guitarId}-count`}
           max={99}
-          value={guitar.count.toString()}
+          value={countGuitar}
           onChange={({target}: ChangeEvent<HTMLInputElement>) => {
+            const value = target.value;
+            setCountGuitar(value);
+          }}
+          onBlur={({target}: ChangeEvent<HTMLInputElement>) => {
             let value = +target.value;
             if (+target.value > MAX_COUNT_GUITAR_IN_CART) {
               value = MAX_COUNT_GUITAR_IN_CART;
-            } else if (+target.value < MIN_COUNT_GUITAR_IN_CART) {
+            } else if (+target.value < MIN_COUNT_GUITAR_IN_CART || target.value === '') {
               value = MIN_COUNT_GUITAR_IN_CART;
+              setCountGuitar(value.toString());
             }
             dispatch(changeCountGuitarInCart({id: guitarId, count: value}));
           }}
+          onKeyDown={keyDownFunction}
         />
         <button
           className="quantity__button"

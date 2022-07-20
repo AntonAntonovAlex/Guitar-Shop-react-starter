@@ -90,7 +90,7 @@ function CartScreen(): JSX.Element {
                       autoComplete="off"
                       pattern='^[^\s]*$'
                       onChange={({target}: ChangeEvent<HTMLInputElement>) => {
-                        const value = target.value;
+                        const value = target.value.replace(/\s/g, '');
                         setCouponValue(value);
                       }}
                       value={couponValue}
